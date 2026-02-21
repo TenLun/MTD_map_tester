@@ -2,47 +2,27 @@
 position
 type
 
-monsterDict['square'] = {
+monsterDataDict['square'] = {
     "type":"square",
     "image":"resources/monsters/Square.png",
     "event":events
 }
 */
-monsterDict = {}
+import { floorsList } from "./map.js";
+import { monsterDataDict } from "./monsters/monsterDict.js";
+import "./monsters/square.js"
+import { CubicOut, toDom } from "./utils.js";
 
-monsterList = []
+export var monsterList = [];
 
-//日光塔格子坐标
-target = []
 
-//目标坐标(相对于地图 即日光塔的坐标)
-function get_target(){
-    for (var tower in tower_data){
-        if (tower_data[tower]["type"] == "sunnytower"){
-            target.push(tower_data[tower]["position"])
-        }
-    }
-}
 
 //添加怪物
 function add_monster(x,y,type,size){
     monsterList.push(new Monster(x,y,type,size))
 }
 
-function render_monster(){
-    for (var monster in monsterList){
-        monsterList[monster].render()
-    }
-}
-
-function monster_event(){
-    for (var monster in monsterList){
-        monsterList[monster].event()
-    }
-}
-eventsListening.push([monster_event,"monster"])
-
-class Monster {
+export class Monster {
     constructor(x,y,type,size){
         //外观
         this.size = size
@@ -56,7 +36,7 @@ class Monster {
 
         this.type = type
 
-        this.image = monsterDict[this.type]["image"]
+        this.image = monsterDataDict[this.type]["image"]
 
         this.hp = this.size
 
@@ -68,14 +48,14 @@ class Monster {
         this.Interval = setInterval( function(){that.animate()} , 50)
     }
 
-    render(){
-        ctx.save();
-        ctx.globalAlpha = 0.5;
-        ctx.translate(this.x +this.size/2,this.y+this.size/2)
-        ctx.rotate(this.direction*Math.PI/180);
-        ctx.translate(-this.x -this.size/2, -this.y-this.size/2)
-        ctx.drawImage(toDom(this.image), this.x, this.y, this.size, this.size)
-        ctx.restore();
+    render(canvasCtx){
+        canvasCtx.save();
+        canvasCtx.globalAlpha = 0.5;
+        canvasCtx.translate(this.x +this.size/2,this.y+this.size/2)
+        canvasCtx.rotate(this.direction*Math.PI/180);
+        canvasCtx.translate(-this.x -this.size/2, -this.y-this.size/2)
+        canvasCtx.drawImage(toDom(this.image), this.x, this.y, this.size, this.size)
+        canvasCtx.restore();
     }
 
     //移动 0°为正下 -90°为正左
@@ -142,8 +122,8 @@ class Monster {
     }
 }
 
-function spawn_monster(){
-    for (floor in floorsList){
+export function spawn_monster(){
+    for (var floor in floorsList){
         if (floorsList[floor].type == "spawner"){
             add_monster(floorsList[floor].canvasX,floorsList[floor].canvasY,'square', Math.ceil(Math.random()*30 +30))
         }

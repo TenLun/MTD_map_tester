@@ -1,3 +1,4 @@
+import { addTowerData } from "./towerDict.js";
 //普通箭塔
 function events(tower){
     for (monster in monsterList) {
@@ -46,11 +47,11 @@ var parameters = {
     }
 }
 
-towerDict["arrowtower"] = {
+addTowerData("arrowtower", {
     "name":"arrowtower",
     "events":events,
     "parameters":parameters,
     "upgradetree":upgradeTree,
     "floor":["ground","gold"], //可以被放置的地板类型
     "image":"resources/towers/ArrowTower.png"
-}
+})

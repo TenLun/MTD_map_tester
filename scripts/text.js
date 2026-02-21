@@ -1,6 +1,11 @@
 //UI使用Dom
 
-textsList = []
+import { getContainer } from "./main.js"
+import { CubicOut } from "./utils.js"
+
+var textsList = []
+
+const container = getContainer()
 
 /**
  * @param {number} x 起始x坐标
@@ -11,7 +16,7 @@ textsList = []
  * @param {number} type 动画选择
  */
 
-function createText(x=0,y=0,content="None",color="#ffffff",size=2,type=1){
+export function createText(x=0,y=0,content="None",color="#ffffff",size=2,type=1){
     textsList.push(new Text(x,y,content,color,size,type))
 }
 

@@ -1,4 +1,4 @@
-
+import { addTowerData } from "./towerDict.js";
 function events(tower){
     for (monster in monsterList) {
         if (Math.pow(monsterList[monster].x-(tower.canvasX+tower.size/2),2)+
@@ -29,11 +29,11 @@ var parameters = {
         'BulletNumber':1
     },
 }
-towerDict["temporaryarrowtower"] = {
+addTowerData("temporaryarrowtower", {
     "name":"temporaryarrowtower",
     "events":events,
     "parameters":parameters,
     "upgradetree":upgradeTree,
     "floor":["ground","gold"], //可以被放置的地板类型
     "image":"resources/towers/TemporaryArrowTower.png"
-}
+})

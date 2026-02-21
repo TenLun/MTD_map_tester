@@ -1,14 +1,18 @@
+import { getContainer } from "./main.js";
+import { towerList } from "./tower.js";
+import { floorsList } from "./map.js";
 //全局的一些参数
-container = document.getElementById("map_container");
+const container = getContainer()
+
 //将图片转换成dom
-function toDom(src){
+export function toDom(src){
     var ImageDom = new Image();
     ImageDom.src = src;
     return ImageDom;
 }
 
 //将图片转换成dom(带颜色)
-function imgToDom(src,width,height,color){
+export function imgToDom(src,width,height,color){
     var wrapper = document.createElement("div");
     wrapper.style.display = "inline-block";
     wrapper.style.overflow = "hidden";
@@ -29,19 +33,25 @@ function imgToDom(src,width,height,color){
 }
 
 //鼠标的一些参数 (在画布上的坐标)
-mouseX = 0
-mouseY = 0
+export var mouseX = 0
+export var mouseY = 0
+
 function getMousePos (event) {
     mouseX = event.clientX - Number(container.style.left.slice(0,-2))
     mouseY = event.clientY - Number(container.style.top.slice(0,-2))
 }
 window.addEventListener('mousemove',getMousePos,false);
 
-function getCurrentPosition(){
+/**
+ * 得到鼠标在地图上的坐标
+ * @returns [鼠标X坐标，鼠标y坐标]
+ */
+export function getCurrentPosition(){
     return [mouseX,mouseY]
 }
 
-mouseDown = 0;
+/*鼠标是否按下 */
+export var mouseDown = 0;
 document.body.onmousedown = function() { 
     mouseDown = 1;
 }
@@ -50,9 +60,21 @@ document.body.onmouseup = function() {
 }
 
 //目前选中的地图格子
-currentGrid = [0,0]
-function getFloorType(){
-    for (floor in floorsList){
+export var currentGrid = [0,0]
+/**
+ * 改变当前选择的格子
+ * @param {*} value 
+ */
+export function setCurrentGrid(value){
+    currentGrid = value
+}
+
+/**
+ * 遍历floorlist 返回当前floor类型
+ * @returns 
+ */
+export function getFloorType(){
+    for (var floor in floorsList){
         if (floorsList[floor].x == currentGrid[0] && floorsList[floor].y == currentGrid[1]){
             return floorsList[floor].type
         } 
@@ -60,8 +82,8 @@ function getFloorType(){
 }
 
 //格子上的塔
-function getTower(x,y){
-    for (tower in towerList){
+export function getTower(x,y){
+    for (var tower in towerList){
         if (towerList[tower].x == x && towerList[tower].y == y){
             return towerList[tower]
         }  
@@ -76,7 +98,7 @@ function getTower(x,y){
  * @param {number} t 动画运行时间
  * @returns {number} 当前动画
  */
-function CubicOut(d,b,c,t){
+export function CubicOut(d,b,c,t){
     return c*((t=t/d-1)*t*t + 1) + b
 }
 

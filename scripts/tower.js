@@ -1,51 +1,37 @@
-
-towerDict={}
+import { SIZE } from "./arguments.js";
+import { towerDataDict } from "./towers/towerDict.js"
+import { STATE, money, crystal, setMoney, setCrystal } from "./main.js";
+import { gradeColor } from "./UI.js";
+import { toDom,currentGrid,getFloorType } from "./utils.js";
+import { createText } from "./text.js";
+import "./towers/arrowtower.js"
+import "./towers/goldmine.js"
+import "./towers/multiplearrowtower.js"
+import "./towers/sunnytower.js"
+import "./towers/temporaryarrowtower.js"
 
 //目前存在的tower对象
-towerList = [];
-
-
-function tower_init(){
-    for (var tower in tower_data){
-        var [tower_x,tower_y] = tower_data[tower]["position"]
-        var tower_type = tower_data[tower]["type"]
-        towerList.push(new Tower(tower_x,tower_y,tower_type))
-    }
-}
+export var towerList = [];
 
 //添加塔
-function add_tower(x,y,type){
+export function add_tower(x,y,type){
 
-    if (!towerDict[type]["floor"].includes(getFloorType())) return;
+    if (!towerDataDict[type]["floor"].includes(getFloorType())) return;
     for (var tower in towerList){
         if (towerList[tower].x == x && towerList[tower].y == y) return;
     }
 
     towerList.push(new Tower(x,y,type))
 
-    money -=  towerDict[type]["parameters"][0]["Cost"]
+    setMoney(money - towerDataDict[type]["parameters"][0]["Cost"])
 
-    createText(x*(size+1), y*(size+1), type, "#ffffff", 2, "normal")
-    render_tower()
+    createText(x*(SIZE+1), y*(SIZE+1), type, "#ffffff", 2, "normal")
 }
 
-//渲染每一个塔
-function render_tower(){
-    for (var tower in towerList){
-        towerList[tower].render()
-    }
-}
-
-function tower_events(){
-    for (var tower in towerList){
-        towerList[tower].events()
-    }
-}
-eventsListening.push([tower_events,"tower"])
-
-class Tower{
+export class Tower{
     
     constructor(x,y,type,grade) {
+        this.size = SIZE
         //相对地图格子上的坐标
         this.x = x
         this.y = y
@@ -56,10 +42,9 @@ class Tower{
         this.type = type 
 
         //真实坐标 px (左上)
-        this.canvasX = this.x*(size+1)
-        this.canvasY = this.y*(size+1)
+        this.canvasX = this.x*(this.size+1)
+        this.canvasY = this.y*(this.size+1)
 
-        this.size = size
         this.width = this.size
         this.height = this.size
 
@@ -68,45 +53,45 @@ class Tower{
 
         this.attacktime = 0
     
-        this.image = towerDict[this.type]["image"]
+        this.image = towerDataDict[this.type]["image"]
 
         //参数
         this.currentGrade = grade || 0 //当前等级
         
-        this.upgradePara= towerDict[this.type]["parameters"]
-        this.upgradeTree = towerDict[this.type]["upgradetree"]
+        this.upgradePara= towerDataDict[this.type]["parameters"]
+        this.upgradeTree = towerDataDict[this.type]["upgradetree"]
 
         this.parameters = this.upgradePara[this.currentGrade] //参数
         this.hp = this.parameters["MaxHealth"] //血量
 
-        this.event = towerDict[this.type]["events"]
+        this.event = towerDataDict[this.type]["events"]
 
     }
 
-    render(animate){
-        ctx.save();
-        ctx.globalAlpha = 0.5;
-        ctx.shadowColor = gradeColor[this.currentGrade];
-        ctx.shadowOffsetY = 10**-10
-        ctx.drawImage(toDom("resources/towers/TowerBase2.png"), this.canvasX+3, this.canvasY+3, size-6, size-6)
+    render(canvasCtx,animate=0){
+        canvasCtx.save();
+        canvasCtx.globalAlpha = 0.5;
+        canvasCtx.shadowColor = gradeColor[this.currentGrade];
+        canvasCtx.shadowOffsetY = 10**-10
+        canvasCtx.drawImage(toDom("resources/towers/TowerBase2.png"), this.canvasX+3, this.canvasY+3, SIZE-6, SIZE-6)
         
-        ctx.restore();
-        ctx.drawImage(toDom("resources/IconOutline2.png"), this.canvasX+10, this.canvasY+10, size-20, size-20)
-        ctx.drawImage(toDom(this.image) , this.canvasX+14, this.canvasY+14, size-28, size-28)
+        canvasCtx.restore();
+        canvasCtx.drawImage(toDom("resources/IconOutline2.png"), this.canvasX+10, this.canvasY+10, SIZE-20, SIZE-20)
+        canvasCtx.drawImage(toDom(this.image) , this.canvasX+14, this.canvasY+14, SIZE-28, SIZE-28)
 
-        this.onselect()
+        this.onselect(canvasCtx)
     }
 
-    onselect(){
+    onselect(canvasCtx){
         if (currentGrid[0] == this.x && currentGrid[1] == this.y){
             //画圆
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(this.canvasX+size/2, this.canvasY+size/2, this.parameters["AttackRange"], 0 ,2*Math.PI);
-            ctx.fillStyle="#ffffff3a"
-            ctx.globalAlpha = 0.5;
-            ctx.fill()
-            ctx.restore();
+            canvasCtx.save();
+            canvasCtx.beginPath();
+            canvasCtx.arc(this.canvasX+SIZE/2, this.canvasY+SIZE/2, this.parameters["AttackRange"], 0 ,2*Math.PI);
+            canvasCtx.fillStyle="#ffffff3a"
+            canvasCtx.globalAlpha = 0.5;
+            canvasCtx.fill()
+            canvasCtx.restore();
         }
     }
 
@@ -116,8 +101,8 @@ class Tower{
     upgrade(upgrade_type){
         this.parameters = this.upgradePara[upgrade_type]
         this.hp = this.parameters["MaxHealth"]
-        money -= this.upgradePara[upgrade_type]["Cost"]["money"]
-        crystal -= this.upgradePara[upgrade_type]["Cost"]["crystal"]
+        setMoney( money - this.upgradePara[upgrade_type]["Cost"]["money"] )
+        setCrystal( crystal - this.upgradePara[upgrade_type]["Cost"]["crystal"])
         this.currentGrade = upgrade_type
 
         createText(this.canvasX,this.canvasY,"upgrade","#00ff00",2,"normal")

@@ -1,25 +1,31 @@
+import { addFloorData } from "./floorDict.js"
 
-floorDict["ground"] = {
+addFloorData("ground", {
     "name":"ground",
     "image": "resources/floors/Ground.png"
-}
+})
 
-floorDict["hill"] = {
+addFloorData("hill", {
     "name":"hill",
     "image": "resources/floors/Hill.png"
-}
+})
 
-floorDict["gold"] = {
+addFloorData("gold", {
     "name":"gold",
     "image": "resources/floors/Gold.png"
-}
+})
 
-floorDict["sea"] = {
+addFloorData("sea", {
     "name":"sea",
     "image": "resources/floors/Sea.png"
-}
+})
 
-floorDict["brokenground"] = {
+addFloorData("brokenground", {
     "name":"brokenground",
     "image": "resources/floors/BrokenGround.png"
-}
+})
+
+addFloorData("spawner",{
+    "name":"spawner",
+    "image": "resources/floors/Spawner.png"
+})

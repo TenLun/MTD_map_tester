@@ -1,5 +1,11 @@
+//这里也使用DOM
+import { currentGrid, toDom, getTower, imgToDom } from "./utils.js"
+import { eventsListening } from "./event.js"
+import { setState,DAYS,tick,money,crystal, getMoney } from "./main.js"
+import { towerDataDict } from "./towers/towerDict.js"
+import { spawn_monster } from "./monster.js"
 //参数的值
-imageUI = {
+const imageUI = {
     "pause": ['resources/UI/icon_common_24.png', "#000000"],
     "start": ['resources/UI/icon_arrow_14.png', "#000000"],
 
@@ -12,7 +18,7 @@ imageUI = {
     "Crystal": ['resources/UI/RockProduction.png', '#ff00ff'],
 }
 // 等级颜色
-gradeColor = {
+export const gradeColor = {
     "0": 'rgb(0,0,0)',
     "1": 'rgb(0,255,0)',
     "2": 'rgb(0, 61, 255)',
@@ -20,48 +26,28 @@ gradeColor = {
 }
 
 // 等级图标
-gradeImage = {
+const gradeImage = {
     "1": 'resources/UI/BaseUpgrade.png',
     "2": 'resources/UI/PromoteUpgrade.png',
     "choose1": '',
 }
 
 //选择的塔
-towersChoose = ["arrowtower", "goldmine", "multiplearrowtower", "temporaryarrowtower"]
-//当前塔
-currentTower = ""
-
-chooseButtonList = []
-upgradeButtonList = []
-
-function UIInit() {
-    infomation = new Info(currentGrid)
-    eventsListening.push([function () { infomation.onChange(currentGrid) }, "event"])
-
-    dayShow = new DayShow(DAYS, tick)
-    eventsListening.push([function () { dayShow.onChange() }, "event"])
-
-    pauseBtn = new StateButton("pause", 470, 9)
-    startBtn = new StateButton("start", 430, 9)
-
-    beginBtn = new BeginBtn()
-
-    displaymoney = new WealthShow(money, 10, 0)
-    eventsListening.push([function () { displaymoney.onChange(money) }, "money"])
-
-    displaycrystal = new WealthShow(crystal, 130, 0)
-    eventsListening.push([function () { displaycrystal.onChange(crystal) }, "crystal"])
-
-    for (tower in towersChoose) {
-        chooseButtonList.push(new Button(tower, towersChoose[tower], 60))
-    }
+var towersChoose = ["arrowtower", "goldmine", "multiplearrowtower", "temporaryarrowtower"]
+//当前选择的塔
+export var currentTower = ""
+export function setCurrentTower(value){
+    currentTower = value
 }
 
+export var chooseButtonList = []
+export var upgradeButtonList = []
+
 //当前选中塔改变
-function changeTowerInfo(grid) {
+export function changeTowerInfo(grid) {
 
     //如果不是塔
-    tower = getTower(grid[0], grid[1])
+    var tower = getTower(grid[0], grid[1])
     if (tower.type == undefined) return;
 
     if (tower.currentGrade == 3 && upgradeButtonList.length < 3) {
@@ -102,14 +88,14 @@ class Button {
         this.chooseButton.style.top = 70 + 65 * this.number + "px";
         this.chooseButton.style.left = "10px";
 
-        this.image = toDom(towerDict[this.tower]["image"]);
+        this.image = toDom(towerDataDict[this.tower]["image"]);
         this.image.style.margin = "auto";
         this.image.style.width = this.size / 2 + "px";
         this.image.style.height = this.size / 2 + "px";
         this.image.style.pointerEvents = "none";
 
         this.costText = document.createElement("div")
-        this.costText.innerHTML = towerDict[this.tower]["parameters"][0]["Cost"];
+        this.costText.innerHTML = towerDataDict[this.tower]["parameters"][0]["Cost"];
         this.costText.style.margin = 'auto';
         this.costText.style.color = 'rgb(0,255,0)';
         this.costText.style.pointerEvents = "none";
@@ -122,7 +108,7 @@ class Button {
         this.chooseButton.appendChild(this.mask);
         document.getElementById("ui_container").appendChild(this.chooseButton);
 
-        this.delayCD = towerDict[this.tower]["parameters"]["delay"]
+        this.delayCD = towerDataDict[this.tower]["parameters"]["delay"]
 
         this.IfOnHover = 0
         var that = this;
@@ -142,15 +128,15 @@ class Button {
     };
 
     animate() {
-        if (money < towerDict[this.tower]["parameters"][0]["Cost"]) {
+        if (getMoney() < towerDataDict[this.tower]["parameters"][0]["Cost"]) {
             if (currentTower == this.tower) currentTower = ""
             this.costText.style.color = 'rgb(255,0,0)';
         } else {
             this.costText.style.color = 'rgb(0,255,0)';
         }
-        this.mask.style.height = (towerDict[this.tower]["parameters"]["delay"] - this.delayCD) / towerDict[this.tower]["parameters"]["delay"] * 100 + "%"
-        this.mask.style.top = this.delayCD / towerDict[this.tower]["parameters"]["delay"] * 100 + "%"
-        if (this.delayCD < towerDict[this.tower]["parameters"]["delay"]) {
+        this.mask.style.height = (towerDataDict[this.tower]["parameters"]["delay"] - this.delayCD) / towerDataDict[this.tower]["parameters"]["delay"] * 100 + "%"
+        this.mask.style.top = this.delayCD / towerDataDict[this.tower]["parameters"]["delay"] * 100 + "%"
+        if (this.delayCD < towerDataDict[this.tower]["parameters"]["delay"]) {
             if (currentTower == this.tower) currentTower = ""
             this.delayCD += 1
         }
@@ -269,7 +255,7 @@ class UpgradeBtn {
 
     // 判断是否符合条件
     animate() {
-        if (money < this.tower.upgradePara[this.upgradeType]["Cost"]["money"] || crystal < this.tower.upgradePara[this.upgradeType]["Cost"]["crystal"]) {
+        if (getMoney() < this.tower.upgradePara[this.upgradeType]["Cost"]["money"] || crystal < this.tower.upgradePara[this.upgradeType]["Cost"]["crystal"]) {
             this.IfAddClickEvent = 0;
             this.upgradeMoney.style.color = "red"
             this.upgradeCrystal.style.color = "red"
@@ -297,7 +283,7 @@ class UpgradeBtn {
     onClick() {
         if (!this.IfAddClickEvent) return;
         this.tower.upgrade(this.upgradeType)
-        infomation.onChange(currentGrid)
+        towerInformation.onChange(currentGrid)
         this.delete()
     }
 }
@@ -560,7 +546,7 @@ class StateButton {
     }
 
     onClick() {
-        STATE = this.state
+        setState(this.state)
     }
     onHover() {
         this.stateButton.style.border = "1px solid white";
@@ -569,5 +555,30 @@ class StateButton {
     onOut() {
         this.stateButton.style.border = "";
         this.stateButton.style.backgroundColor = "#414141";
+    }
+}
+
+
+var towerInformation = new Info(currentGrid)
+export function UIInit() {
+    
+    eventsListening.push([function () { towerInformation.onChange(currentGrid) }, "event"])
+
+    var dayShow = new DayShow(DAYS, tick)
+    eventsListening.push([function () { dayShow.onChange() }, "event"])
+
+    const pauseBtn = new StateButton("pause", 470, 9)
+    const startBtn = new StateButton("start", 430, 9)
+
+    const beginBtn = new BeginBtn()
+
+    const displaymoney = new WealthShow(getMoney(), 10, 0)
+    eventsListening.push([function () { displaymoney.onChange(getMoney()) }, "money"])
+
+    const displaycrystal = new WealthShow(crystal, 130, 0)
+    eventsListening.push([function () { displaycrystal.onChange(crystal) }, "crystal"])
+
+    for (var tower in towersChoose) {
+        chooseButtonList.push(new Button(tower, towersChoose[tower], 60))
     }
 }

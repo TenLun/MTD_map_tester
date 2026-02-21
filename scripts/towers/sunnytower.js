@@ -1,4 +1,4 @@
-
+import { addTowerData } from "./towerDict.js";
 function events(tower){
     money += tower.parameters['Gold']
     createText(tower.canvasX, tower.canvasY, tower.parameters['Gold']+"G","#ffff00",1.5,"production")
@@ -27,11 +27,11 @@ var parameters = {
         "Crystal":4
     }
 }
-towerDict["sunnytower"] = {
+addTowerData("sunnytower", {
     "name":"sunnytower",
     "events":events,
     "parameters":parameters,
     "upgradetree":upgradeTree,
     "floor":"floor", //可以被放置的地板类型
     "image":"resources/towers/SunnyTower.png"
-}
+})

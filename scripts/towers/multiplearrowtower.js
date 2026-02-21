@@ -1,3 +1,4 @@
+import { addTowerData } from "./towerDict.js";
 function events(tower) {
     for (monster in monsterList) {
         if (Math.pow(monsterList[monster].x + monsterList[monster].size / 2 - (tower.canvasX + tower.size / 2), 2) +
@@ -38,11 +39,11 @@ var parameters = {
     },
 }
 
-towerDict["multiplearrowtower"] = {
+addTowerData("multiplearrowtower", {
     "name": "multiplearrowtower",
     "events": events,
     "parameters": parameters,
     "upgradetree": upgradeTree,
     "floor": ["ground","gold"], //可以被放置的地板类型
     "image": "resources/towers/MultipleArrowTower.png"
-}
+})

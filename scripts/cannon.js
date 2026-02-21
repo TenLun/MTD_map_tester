@@ -1,6 +1,6 @@
-cannonDict={}
+export var cannonDict={}
 
-cannonsList = [];
+export var cannonsList = [];
 
 /**
  * 
@@ -13,18 +13,6 @@ cannonsList = [];
 function createCannon(x,y,direction,size,damage){
     cannonsList.push(new Cannon(x,y,direction,size,damage))
 }
-
-function render_cannon(){
-    for (var cannon in cannonsList){
-        cannonsList[cannon].render()
-    }
-}
-function cannon_event(){
-    for (var cannon in cannonsList){
-        cannonsList[cannon].event()
-    }
-}
-eventsListening.push([cannon_event,"cannon"])
 
 class Cannon{
     
