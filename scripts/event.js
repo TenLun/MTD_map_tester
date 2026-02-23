@@ -47,9 +47,7 @@ function getDayLenth(current_day){
     for (const day in TOTALDAYS){
         if (day > current_day) break;
         dayLenth += eval(TOTALDAYS[day].join("+"));
-        console.log(dayLenth)
     }
-    
     return dayLenth
 }
 

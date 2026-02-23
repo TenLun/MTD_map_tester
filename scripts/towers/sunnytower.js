@@ -1,4 +1,4 @@
-import { addTowerData } from "./towerDict.js";
+import { addTowerData } from "../gameArguments.js";
 import { setMoney,money,crystal,setCrystal,tick } from "../gameArguments.js";
 import { createText } from "../text.js";
 
@@ -41,6 +41,6 @@ addTowerData("sunnytower", {
     "events":events,
     "parameters":parameters,
     "upgradetree":upgradeTree,
-    "floor":"floor", //可以被放置的地板类型
+    "floor":["floor","brokenground"], //可以被放置的地板类型
     "image":"resources/towers/SunnyTower.png"
 })

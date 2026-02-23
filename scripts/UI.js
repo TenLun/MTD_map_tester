@@ -4,10 +4,8 @@ import { toDom,imgToDom } from "./utils/covertToDOM.js"
 import { eventsListening } from "./event.js"
 import { towerList,setState,
     TOTALDAYS,tick,day,money,crystal, 
-    STATE} from "./gameArguments.js"
-import { towerDataDict } from "./towers/towerDict.js"
+    STATE,towerDataDict} from "./gameArguments.js"
 import { spawn_monster } from "./monster.js"
-
 
 //参数的值
 const imageUI = {
@@ -38,7 +36,7 @@ const gradeImage = {
 }
 
 //选择的塔
-var towersChoose = ["arrowtower", "goldmine", "multiplearrowtower", "temporaryarrowtower"]
+var towersChoose = ["arrowtower", "goldmine", "multiplearrowtower", "temporaryarrowtower","wall"]
 //当前选择的塔
 export var currentTower = ""
 export function setCurrentTower(value){

@@ -1,4 +1,4 @@
-import { addTowerData } from "./towerDict.js";
+import { addTowerData } from "../gameArguments.js";
 import { createCannon } from "../cannon.js";
 import { Angle } from "../utils/animation.js";
 import { monsterList, tick } from "../gameArguments.js";
@@ -6,18 +6,18 @@ import { monsterList, tick } from "../gameArguments.js";
 var attackTime = tick;
 
 //普通箭塔
-function events(towerObject){
+function events(towerObj){
     if ( (tick - attackTime)/60 < towerObj.parameters["AttackTime"]) return;
 
     for (monster in monsterList) {
-        if (Math.pow(monsterList[monster].x-(towerObject.canvasX + towerObject.size/2),2)+
-            Math.pow(monsterList[monster].y-(towerObject.canvasY+towerObject.size/2),2) <= Math.pow(towerObject.parameters['AttackRange'],2)){
+        if (Math.pow(monsterList[monster].x-(towerObj.canvasX + towerObj.size/2),2)+
+            Math.pow(monsterList[monster].y-(towerObj.canvasY+towerObj.size/2),2) <= Math.pow(towerObj.parameters['AttackRange'],2)){
             createCannon(
-                (towerObject.canvasX+towerObject.size/2),(towerObject.canvasY+towerObject.size/2),
-                Angle([(towerObject.canvasX+towerObject.size/2), (towerObject.canvasY+towerObject.size/2)]
+                (towerObj.canvasX+towerObj.size/2),(towerObj.canvasY+towerObj.size/2),
+                Angle([(towerObj.canvasX+towerObj.size/2), (towerObj.canvasY+towerObj.size/2)]
                 , [monsterList[monster].x, monsterList[monster].y]),
                 10,
-                towerObject.parameters['AttackPower']
+                towerObj.parameters['AttackPower']
             )
             break;
         }

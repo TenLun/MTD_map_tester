@@ -1,4 +1,4 @@
-import { addTowerData } from "./towerDict.js";
+import { addTowerData } from "../gameArguments.js";
 import { monsterList,tick } from "../gameArguments.js";
 import { createCannon } from "../cannon.js"
 import { Angle } from "../utils/animation.js"

@@ -3,10 +3,9 @@ import { getCurrentPosition,mouseDown } from "./utils/mouse.js";
 import { currentGrid,setCurrentGrid,getTower } from "./utils/floorFuncs.js";
 
 import { add_tower } from "./tower.js";
-import { towerDataDict } from "./towers/towerDict.js";
 import { currentTower,changeTowerInfo,chooseButtonList, setCurrentTower } from "./UI.js";
 
-import { SIZE,towerList } from "./gameArguments.js";
+import { SIZE,towerList,towerDataDict } from "./gameArguments.js";
 import { floorDataDict } from "./floors/floorDict.js";
 import "./floors/ground.js"
 
@@ -31,11 +30,12 @@ eventsListening.push(click_map)
 */
 export class Ground{
     
-    constructor(x,y,type) {
+    constructor(position,type) {
         
         //相对地图格子上的坐标
-        this.x = x
-        this.y = y
+        this.position = [position[0],position[1]];  //相对地图格子上的坐标
+        this.x = this.position[0]
+        this.y = this.position[1]
         this.size = SIZE
         this.width = SIZE
         this.height = SIZE
@@ -88,7 +88,7 @@ export class Ground{
         setCurrentGrid([this.x,this.y])
         //没有塔，地板可以放置
         if (currentTower && !getTower(towerList,this.x,this.y) && towerDataDict[currentTower]['floor'].includes(this.type) ) {
-            add_tower(this.x,this.y,currentTower)
+            add_tower([this.x,this.y],currentTower)
             //刷新CD
             for (var ele in chooseButtonList){
                 if (chooseButtonList[ele].tower == currentTower){

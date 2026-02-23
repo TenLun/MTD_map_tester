@@ -6,6 +6,7 @@ import { toGrid,toPosition } from "./utils/convetCoords.js";
 import { CubicOut, Angle } from "./utils/animation.js";
 import { STATE,TOTALDAYS,day,
     towerList,floorsList,monsterList,target } from "./gameArguments.js";
+import { Tower } from "./tower.js";
 /*
 position
 type
@@ -29,63 +30,68 @@ export class Monster {
 
         this.id = Math.ceil(Math.random()*10000000)
 
-        //对于ctx的像素位置 (左上)
-        //真实坐标 px
-        this.x = x 
-        this.y = y 
+        //对于ctx的像素位置 (原点左上) 真实坐标 px
+        this.canvasX = x 
+        this.canvasY = y 
 
         this.type = type
 
         this.image = monsterDataDict[this.type]["image"]
+        //this.event = monsterDataDict[this.type]["event"]
 
         this.hp = this.size
 
         //动画部分
+        this.animateX = this.canvasX //渲染位置
+        this.animateY = this.canvasY
         this.i = [0,this.size]
         this.size = 0
-
-        var that = this
-        this.Interval = setInterval( function(){that.animate()} , 50)
     }
 
     render(canvasCtx){
         canvasCtx.save();
         canvasCtx.globalAlpha = 0.5;
-        canvasCtx.translate(this.x +this.size/2,this.y+this.size/2)
+        canvasCtx.translate(this.canvasX +this.size/2,this.canvasY+this.size/2)
         canvasCtx.rotate(this.direction*Math.PI/180);
-        canvasCtx.translate(-this.x -this.size/2, -this.y-this.size/2)
-        canvasCtx.drawImage(toDom(this.image), this.x, this.y, this.size, this.size)
+        canvasCtx.translate(-this.canvasX -this.size/2, -this.canvasY-this.size/2)
+        canvasCtx.drawImage(toDom(this.image), this.canvasX, this.canvasY, this.size, this.size)
         canvasCtx.restore();
+        this.animate()
     }
 
     /**
      * 移动 0°为正下 -90°为正左
      * @param {*} direction 方向
-     * @param {*} length 
+     * @param {*} length 长度
      */
     move(direction,length){
-        console.log('1')
-        this.x += Math.cos((direction)*Math.PI/180)*length; 
-        this.y += Math.sin((direction)*Math.PI/180)*length; 
+        this.canvasX += Math.cos((direction)*Math.PI/180) * length; 
+        this.canvasY += Math.sin((direction)*Math.PI/180) * length; 
     }
     
-    //寻路算法
+    /**
+     * 寻路 todo
+     * @param {Tower} target 塔对象（日光塔）
+     * @param {*} current_x 
+     * @param {*} current_y 
+     */
     find_path(target,current_x,current_y){
         this.move(
-            Angle([this.x,this.y],[target.x,target.y]),
+            Angle([this.canvasX,this.canvasY],toPosition(floorsList,target.position)),
             this.size/100 );
     }
 
     //事件，被子弹击打，碰到塔/地板
     event(){
         if (STATE == "pause" || day == TOTALDAYS.length) return;
+        //碰到塔
         for (const towerObj of towerList){
-            if ( (toGrid(floorsList, this.x+this.size-2,this.y)[0] == towerObj.x || toGrid(floorsList, this.x,this.y)[0] == towerObj.x) &&
-            (toGrid(floorsList, this.x,this.y+this.size-2)[1] == towerObj.y || toGrid(floorsList, this.x,this.y)[1] == towerObj.y)){
+            if ( (toGrid(floorsList, this.canvasX+this.size-2,this.canvasY)[0] == towerObj.x || toGrid(floorsList, this.canvasX,this.canvasY)[0] == towerObj.x) &&
+            (toGrid(floorsList, this.canvasX,this.canvasY+this.size-2)[1] == towerObj.y || toGrid(floorsList, this.canvasX,this.canvasY)[1] == towerObj.y)){
                 this.damage(towerObj)
                 this.move(
-                    Angle(this.x,this.y,toPosition(target[0][0],target[0][1])[0] + 15, toPosition(target[0][0],target[0][1])[1] + 15),
-                    -2*this.size
+                    Angle([this.canvasX,this.canvasY],toPosition(floorsList,target[0].position)),
+                    -20
                 )
             }
         }
@@ -94,7 +100,6 @@ export class Monster {
         if (this.hp <= 0) {
             this.destroy()
         }
-
     }
 
     //伤害塔
@@ -105,22 +110,24 @@ export class Monster {
     //自己受到伤害
     hurt(damage){
         this.hp -= damage
-        createText(this.x,this.y,damage,"#ff0000",1.5,"number")
+        createText(this.canvasX,this.canvasY,damage,"#ff0000",1.5,"number")
     }
 
+    //位置大小更改
     animate(){
         if (this.i[0] < 1){
             this.size = this.i[1]*CubicOut(1,0,1,this.i[0])
             this.i[0] += 0.1
-        }else{
-            clearInterval(this.Interval)
         }
+        this.animateX += ( this.canvasX - this.animateX ) / 1000
+        this.animateY += ( this.canvasX - this.animateY ) / 1000
     }
 
     destroy(){
         for (var monster in monsterList){
             if ( monsterList[monster].id == this.id ){
                 monsterList.splice(monster,1)
+                delete this
             }
         }
     }

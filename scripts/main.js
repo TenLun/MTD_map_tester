@@ -1,4 +1,5 @@
 import { setTarget,towerList,floorsList } from "./gameArguments.js";
+import "./towers/towerDictPlugin.js"
 import { runEvents } from "./event.js";
 import { Tower } from "./tower.js";
 import { Ground } from "./map.js";
@@ -26,18 +27,18 @@ function MainLoop() {
 
 function tower_init(tower_data,tower_list){
     for (const towerArg of tower_data){
-        var [tower_x,tower_y] = towerArg["position"]
-        var tower_type = towerArg["type"]
-        tower_list.push(new Tower(tower_x,tower_y,tower_type))
+        var towerPos = towerArg["position"]
+        var towerType = towerArg["type"]
+        tower_list.push(new Tower(towerPos,towerType))
     }
 }
 
 //刷新地板 到 floorsList 里
 function floor_init(floor_data,floor_list){
     for (const floorArg of floor_data){
-        var [floor_x,floor_y] = floorArg["position"]
+        var floorPos = floorArg["position"]
         var floor_type = floorArg["type"]
-        floor_list.push(new Ground(floor_x,floor_y,floor_type))
+        floor_list.push(new Ground(floorPos,floor_type))
     }
 }
 

@@ -1,61 +1,62 @@
-import { towerDataDict } from "./towers/towerDict.js"
 import { SIZE,STATE,
     money, crystal, setMoney, setCrystal,
-    TOTALDAYS,day,floorsList,towerList } from "./gameArguments.js";
+    TOTALDAYS,day,floorsList,towerList,towerDataDict } from "./gameArguments.js";
 import { gradeColor } from "./UI.js";
 import { toDom } from "./utils/covertToDOM.js";
 import { currentGrid, getFloorType } from "./utils/floorFuncs.js";
 import { createText } from "./text.js";
-import "./towers/arrowtower.js"
-import "./towers/goldmine.js"
-import "./towers/multiplearrowtower.js"
-import "./towers/sunnytower.js"
-import "./towers/temporaryarrowtower.js"
 
-//添加塔
-export function add_tower(x,y,type){
-    if (!towerDataDict[type]["floor"].includes(getFloorType(floorsList))) return;
-    for (var tower in towerList){
-        if (towerList[tower].x == x && towerList[tower].y == y) return;
+/**
+ * 添加塔
+ * @param {number[]} position [x,y]
+ * @param {string} type 塔类型
+ * @returns {void}
+ */
+export function add_tower(position,type){
+    if (!towerDataDict[type]["floor"].includes(getFloorType(floorsList))) return; //不是自己的地板类型
+    for (const towerObj of towerList){
+        if (towerObj.position == position) return; //这个位置已经有了塔
     }
-
-    towerList.push(new Tower(x,y,type))
+    towerList.push(new Tower(position,type))
     setMoney(money - towerDataDict[type]["parameters"][0]["Cost"])
-    createText(x*(SIZE+1), y*(SIZE+1), type, "#ffffff", 2, "normal")
+    createText(position[0]*(SIZE+1), position[1]*(SIZE+1), type, "#ffffff", 2, "normal")
 }
 
-export class Tower{
-    constructor(x,y,type,grade) {
-        this.size = SIZE
-        //相对地图格子上的坐标
-        this.x = x
-        this.y = y
 
+export class Tower{
+    /**
+     * 
+     * @param {*} position [x,y]
+     * @param {*} type 塔类型
+     * @param {*} grade 塔等级
+     */
+    constructor(position,type,grade) {
+        //基本参数
+        this.size = SIZE
+        this.position = [position[0],position[1]]
+        this.x = this.position[0];//相对地图格子上的坐标
+        this.y = this.position[1];
+        this.type = type;               //类型
+        this.currentGrade = grade || 0 //当前等级
+        
         this.id = "tower-"+Math.ceil(Math.random()*10000000)
 
-        //类型
-        this.type = type 
-
-        //真实坐标 px (左上)
-        this.canvasX = this.x*(this.size+1)
+        this.canvasX = this.x*(this.size+1) //真实坐标 px (左上)
         this.canvasY = this.y*(this.size+1)
 
         this.width = this.size
         this.height = this.size
 
-        //缩放动画
-        this.animate = 0
-    
+        this.animate = 0 //缩放动画
         this.image = towerDataDict[this.type]["image"]
 
         //参数
-        this.currentGrade = grade || 0 //当前等级
-        
-        this.upgradePara= towerDataDict[this.type]["parameters"]
+        this.upgradePara = towerDataDict[this.type]["parameters"]
         this.upgradeTree = towerDataDict[this.type]["upgradetree"]
 
         this.parameters = this.upgradePara[this.currentGrade] //参数
         this.hp = this.parameters["MaxHealth"] //血量
+        this.state = "alive" //还有一种是死亡"dead"
 
         this.event = towerDataDict[this.type]["events"]
 

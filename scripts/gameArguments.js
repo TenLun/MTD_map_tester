@@ -1,6 +1,8 @@
 /**
+ * 没有import放心导入，变量指针是一样的
  * 这个文件存放的是游戏的公共数据
  */
+
 //地图格子大小 以后变为放大倍率
 export const SIZE = 60
 export const OFFSET = [70, 30] //地图偏移量 [x,y] px
@@ -51,6 +53,10 @@ export var towerList = []; //目前存在的tower对象
 export var floorsList = [];
 export var cannonsList = [];
 
+export var towerDataDict = {} //这里是塔数据保存
+export function addTowerData(key,value){
+    towerDataDict[key]=value
+}
 // export function getGameArguments(){
 //     return {
 //         "state":STATE,
@@ -64,3 +70,5 @@ export var cannonsList = [];
 //         "floorList":floorsList,
 //     }
 // }
+
+import("./towers/towerDictPlugin.js")

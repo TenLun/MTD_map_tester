@@ -1,5 +1,5 @@
 import { setMoney, money,tick } from "../gameArguments.js";
-import { addTowerData } from "./towerDict.js";
+import { addTowerData } from "../gameArguments.js";
 
 var attackTime = tick;
 
