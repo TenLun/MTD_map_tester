@@ -26,8 +26,8 @@ class Cannon{
         this.id = Math.ceil(Math.random()*10000000)
     }
 
-    render(){
-        ctx.drawImage(toDom("resources/cannon/CircalBullet.png"), this.x, this.y, this.size, this.size)
+    render(canvasCtx){
+        canvasCtx.drawImage(toDom("resources/cannon/CircalBullet.png"), this.x, this.y, this.size, this.size)
     }
     
     //打到怪物

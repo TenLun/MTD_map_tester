@@ -12,13 +12,16 @@ const canvasWidth = cacheCanvas.width = mainCanvas.width = 1448;
 const canvasHeight = cacheCanvas.height = mainCanvas.height = 750;
 //全部渲染
 export function renderAll() {
+    cacheCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+
     MAP_CONTAINER.style.left = OFFSET[0] + "px"
     MAP_CONTAINER.style.top = OFFSET[1] + "px"
+    
     render_map(floorsList) //地图块在最底下
     render_tower(towerList) //塔的图层占中
     render_monster(monsterList)
     render_cannon(cannonsList)
-    //render_text() //最上面是文字
+    //render_text() //deprecate 换成dom了 最上面是文字
     mainCtx.drawImage(cacheCanvas, 0, 0)
 }
 
@@ -38,7 +41,7 @@ function render_tower(tower_list){
 //渲染子弹
 function render_cannon(cannons_list){
     for (const cannonObj of cannons_list){
-        cannonObj.render()
+        cannonObj.render(cacheCtx)
     }
 }
 
@@ -46,7 +49,7 @@ function render_cannon(cannons_list){
 function render_map(floors_list){
     cacheCtx.save();
     cacheCtx.fillStyle = "#414141";
-    cacheCtx.fillRect(0, 0, canvasWidth, canvasHeight);
+    cacheCtx.fillRect(0, 0, canvasWidth, canvasHeight); //绘制背景
     for (const floorObj of floors_list){
         floorObj.render(cacheCtx)
     }

@@ -66,7 +66,7 @@ function changeChooseTower() {
 }
 
 //塔类选择
-class Button {
+class TowerChooseButton {
     constructor(number, tower, size) {
         this.number = number
         this.tower = tower
@@ -78,19 +78,20 @@ class Button {
 
     Init() {
         this.chooseButton = document.createElement("div")
-        this.chooseButton.style.userSelect = 'none';
-        this.chooseButton.style.backgroundColor = "#414141";
-        this.chooseButton.style.borderRadius = "5px";
-        this.chooseButton.style.padding = "1px";
-        this.chooseButton.style.width = this.size + "px";
-        this.chooseButton.style.height = this.size + "px";
-        this.chooseButton.style.position = 'absolute';
-        this.chooseButton.style.display = 'flex';
-        this.chooseButton.style.flexDirection = 'column';
-        this.chooseButton.style.pointerEvents = "auto";
-        this.chooseButton.style.top = 70 + 65 * this.number + "px";
-        this.chooseButton.style.left = "10px";
-
+        this.chooseButton.style.cssText = `
+            user-select: none;
+            pointer-events: auto;
+            background-color: #414141;
+            border-radius: 5px;
+            padding: 1px;
+            width: ${this.size}px;
+            height: ${this.size}px;
+            position: absolute;
+            top: ${70 + 65 * this.number}px;
+            left: 10px;
+            display: flex;
+            flex-direction: column;
+        `
         this.image = toDom(towerDataDict[this.tower]["image"]);
         this.image.style.margin = "auto";
         this.image.style.width = this.size / 2 + "px";
@@ -173,15 +174,17 @@ class BeginBtn {
     }
     Init() {
         this.startButton = document.createElement("div");
-        this.startButton.style.cssText = 'text-align:center;\
-                                        user-select:none;\
-                                        background-color:#131313;\
-                                        border-radius:5px;\
-                                        padding:10px;\
-                                        width:150px;\
-                                        height:70px;\
-                                        position:fixed;\
-                                        left:0px; bottom:0px; color:white'
+        this.startButton.style.cssText = `
+            text-align:center;
+            user-select:none;
+            background-color:#131313;
+            border-radius:5px;
+            padding:10px;
+            width:150px;
+            height:70px;
+            position:fixed;
+            left:0px; bottom:0px; color:white
+        `
         this.startButton.innerHTML = "开始游戏"
 
         document.getElementById("ui_container").appendChild(this.startButton)
@@ -209,19 +212,20 @@ class UpgradeBtn {
         this.Init()
     }
     Init() {
-
         //主体
         this.upgradeButton = document.createElement("div");
-        this.upgradeButton.style.textAlign = "center"
-        this.upgradeButton.style.userSelect = 'none';
-        this.upgradeButton.style.backgroundColor = "#131313"
-        this.upgradeButton.style.borderRadius = "5px"
-        this.upgradeButton.style.padding = "10px"
-        this.upgradeButton.style.width = "70px"
-        this.upgradeButton.style.height = "70px"
-        this.upgradeButton.style.position = 'fixed';
-        this.upgradeButton.style.left = '50vw';
-        this.upgradeButton.style.bottom = '30px';
+        this.upgradeButton.style.cssText = `
+            text-align: center;
+            user-select: none;
+            background-color: #131313;
+            border-radius: 5px;
+            padding: 10px;
+            width: 70px;
+            height: 70px;
+            position: fixed;
+            left: 50vw;
+            bottom: 30px;
+        `
         //图片
         this.upgradeImage = toDom(gradeImage[this.upgradeType])
         this.upgradeImage.width = 55
@@ -327,18 +331,17 @@ class Info {
         this.hp.style.fontSize = "20px"
         this.hp.innerHTML = "0"
 
-        this.towerImage = toDom("")
-        this.towerImage.style.position = "absolute"
-        this.towerImage.style.right = "10px"
-        this.towerImage.style.top = "10px"
-        this.towerImage.style.width = "30px"
-        this.towerImage.style.height = "30px"
-
-        this.divider = document.createElement("hr")
-
+        this.towerImage = toDom("");
+        this.towerImage.cssText=`
+            position:absolute;
+            right:10px;
+            top: "10px";
+            width: 30px;
+            height: 30px;
+        `
         // 展示参数
+        this.divider = document.createElement("hr")
         this.detail = document.createElement("div")
-
         this.dividerbottom = document.createElement("hr")
 
         this.informationbar.appendChild(this.name)
@@ -458,12 +461,13 @@ class DayShow {
         this.days.innerHTML = "天数0";
 
         this.timebar = document.createElement("div")
-        this.timebar.style.backgroundColor = "gray"
-        this.timebar.style.width = "390px"
-        this.timebar.style.height = "10px"
-        this.timebar.style.display = "flex";
-        this.timebar.style.position = "absolute"
-
+        this.timebar.style.cssText=`
+            background-color: gray;
+            width: 390px;
+            height: 10px;
+            display: flex;
+            position: absolute
+        `
         this.daytimebar = document.createElement("div");
         this.daytimebar.style.backgroundColor = "yellow"
         this.daytimebar.style.width = "0%"
@@ -477,14 +481,15 @@ class DayShow {
         this.nightbar.style.width = "0%"
 
         this.timeSliderHander = toDom("resources/UI/TimeSliderHander.png");
-        this.timeSliderHander.style.position = "absolute"
-        this.timeSliderHander.style.width = "1px"
-        this.timeSliderHander.style.height = "20px"
-        this.timeSliderHander.style.top = this.timebar.style.height
-        this.timeSliderHander.style.left = "0%"
-        this.timeSliderHander.style.objectFit = "cover"
-        this.timeSliderHander.style.overflow = "visible"
-
+        this.timeSliderHander.style.cssText = `
+            position: absolute;
+            width: 1px;
+            height: 20px;
+            top: ${this.timebar.style.height};
+            left: 0;
+            objectFit: cover;
+            overflow: visible;
+        `
         this.timebar.appendChild(this.daytimebar)
         this.timebar.appendChild(this.afternoonbar)
         this.timebar.appendChild(this.nightbar)
@@ -609,7 +614,7 @@ export function UIInit() {
     eventsListening.push([function () { displaycrystal.onChange(crystal) }, "crystal"])
 
     for (var tower in towersChoose) {
-        chooseButtonList.push(new Button(tower, towersChoose[tower], 60))
+        chooseButtonList.push(new TowerChooseButton(tower, towersChoose[tower], 60))
     }
 }
 
