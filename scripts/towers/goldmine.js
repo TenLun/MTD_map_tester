@@ -1,4 +1,5 @@
 import { addTowerData } from "./towerDict.js";
+
 function events(tower){
     money += tower.parameters['Gold']
     createText(tower.canvasX, tower.canvasY, tower.parameters['Gold']+"G", "#ffff00",1.5,"production")

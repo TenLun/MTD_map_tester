@@ -1,11 +1,9 @@
 //UI使用Dom
 
-import { getContainer } from "./main.js"
-import { CubicOut } from "./utils.js"
+import { MAP_CONTAINER } from "./utils/getElements.js"
+import { CubicOut } from "./utils/animation.js"
 
 var textsList = []
-
-const container = getContainer()
 
 /**
  * @param {number} x 起始x坐标
@@ -39,7 +37,7 @@ class Text{
         this.dom.style.position = 'absolute'
         this.dom.style.display = 'none';
         this.dom.style.textShadow = "1px 1px black";
-        container.appendChild(this.dom)
+        MAP_CONTAINER.appendChild(this.dom)
 
         this.id = Math.ceil(Math.random()*10000000)
 

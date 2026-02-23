@@ -1,7 +1,5 @@
 export var cannonDict={}
 
-export var cannonsList = [];
-
 /**
  * 
  * @param {number} x //坐标
@@ -10,7 +8,7 @@ export var cannonsList = [];
  * @param {number} size //大小
  * @param {number} damage //伤害
  */
-function createCannon(x,y,direction,size,damage){
+export function createCannon(x,y,direction,size,damage){
     cannonsList.push(new Cannon(x,y,direction,size,damage))
 }
 

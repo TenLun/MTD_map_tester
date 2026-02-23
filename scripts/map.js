@@ -1,3 +1,15 @@
+import { toDom } from "./utils/covertToDOM.js";
+import { getCurrentPosition,mouseDown } from "./utils/mouse.js";
+import { currentGrid,setCurrentGrid,getTower } from "./utils/floorFuncs.js";
+
+import { add_tower } from "./tower.js";
+import { towerDataDict } from "./towers/towerDict.js";
+import { currentTower,changeTowerInfo,chooseButtonList, setCurrentTower } from "./UI.js";
+
+import { SIZE,towerList } from "./gameArguments.js";
+import { floorDataDict } from "./floors/floorDict.js";
+import "./floors/ground.js"
+
 //整个大类型叫floor
 /*
 floorDict["hill"] = {
@@ -9,17 +21,6 @@ floorDict["hill"] = {
         {"type":"hill","position":[0,0]},
     ]
 */
-import { add_tower } from "./tower.js";
-import { towerDataDict } from "./towers/towerDict.js";
-import { currentTower,changeTowerInfo,chooseButtonList, setCurrentTower } from "./UI.js";
-import { toDom,getCurrentPosition,
-    mouseDown,currentGrid,setCurrentGrid,getTower} from "./utils.js";
-import { SIZE } from "./arguments.js";
-import { floorDataDict } from "./floors/floorDict.js";
-import "./floors/ground.js"
-
-export var floorsList = [];
-
 /*
 function click_map(){
     for (var floor in floorsList){
@@ -47,13 +48,9 @@ export class Ground{
 
     }
 
-    //不仅是渲染 还有渲染时调用事件
+    //渲染
     render(canvasCtx){
         canvasCtx.drawImage(toDom(this.image), this.canvasX, this.canvasY, this.size, this.size)
-        this.onHover(canvasCtx)
-    }
-
-    onHover(canvasCtx){
         if (getCurrentPosition()[0] > this.canvasX && getCurrentPosition()[0] < this.canvasX+this.width &&
         getCurrentPosition()[1] > this.canvasY && getCurrentPosition()[1] < this.canvasY+ this.height){
 
@@ -65,7 +62,7 @@ export class Ground{
                 canvasCtx.globalAlpha = 0.5;
                 canvasCtx.shadowColor = 'rgba(0,256,0,99)';
                 //没有塔，地板可以放置
-                if (getTower(this.x,this.y) || !(towerDataDict[currentTower]['floor'].includes(this.type))) {
+                if (getTower(towerList,this.x,this.y) || !(towerDataDict[currentTower]['floor'].includes(this.type))) {
                     canvasCtx.shadowColor = 'rgba(256,0,0,99)';
                 }
                 
@@ -76,7 +73,6 @@ export class Ground{
                 canvasCtx.restore();
             }
             if (mouseDown) {
-                this.onClick()
                 canvasCtx.save()
                 canvasCtx.fillStyle = '#ffff0077';
                 canvasCtx.fillRect(this.canvasX, this.canvasY, SIZE, SIZE);
@@ -84,12 +80,14 @@ export class Ground{
             }
         }
     }
-
     //地板被点击切换当前选中塔
     onClick(){
+        if (! (getCurrentPosition()[0] > this.canvasX && getCurrentPosition()[0] < this.canvasX+this.width &&
+        getCurrentPosition()[1] > this.canvasY && getCurrentPosition()[1] < this.canvasY+ this.height)) return;
+        if (!mouseDown) return;
         setCurrentGrid([this.x,this.y])
         //没有塔，地板可以放置
-        if (currentTower && !getTower(this.x,this.y) && towerDataDict[currentTower]['floor'].includes(this.type) ) {
+        if (currentTower && !getTower(towerList,this.x,this.y) && towerDataDict[currentTower]['floor'].includes(this.type) ) {
             add_tower(this.x,this.y,currentTower)
             //刷新CD
             for (var ele in chooseButtonList){
@@ -100,7 +98,11 @@ export class Ground{
             setCurrentTower("")
         }
         changeTowerInfo(currentGrid)
-        
+    };
+
+    //调用事件
+    event(){
+        this.onClick()
     }
 }
 

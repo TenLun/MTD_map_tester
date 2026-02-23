@@ -1,9 +1,14 @@
 //这里也使用DOM
-import { currentGrid, toDom, getTower, imgToDom } from "./utils.js"
+import { getTower,currentGrid } from "./utils/floorFuncs.js"
+import { toDom,imgToDom } from "./utils/covertToDOM.js"
 import { eventsListening } from "./event.js"
-import { setState,DAYS,tick,money,crystal, getMoney } from "./main.js"
+import { towerList,setState,
+    TOTALDAYS,tick,day,money,crystal, 
+    STATE} from "./gameArguments.js"
 import { towerDataDict } from "./towers/towerDict.js"
 import { spawn_monster } from "./monster.js"
+
+
 //参数的值
 const imageUI = {
     "pause": ['resources/UI/icon_common_24.png', "#000000"],
@@ -47,7 +52,7 @@ export var upgradeButtonList = []
 export function changeTowerInfo(grid) {
 
     //如果不是塔
-    var tower = getTower(grid[0], grid[1])
+    var tower = getTower(towerList, grid[0], grid[1])
     if (tower.type == undefined) return;
 
     if (tower.currentGrade == 3 && upgradeButtonList.length < 3) {
@@ -128,7 +133,7 @@ class Button {
     };
 
     animate() {
-        if (getMoney() < towerDataDict[this.tower]["parameters"][0]["Cost"]) {
+        if (money < towerDataDict[this.tower]["parameters"][0]["Cost"]) {
             if (currentTower == this.tower) currentTower = ""
             this.costText.style.color = 'rgb(255,0,0)';
         } else {
@@ -163,6 +168,7 @@ class Button {
     }
 }
 
+//开始游戏
 class BeginBtn {
     constructor() {
         this.Init()
@@ -200,7 +206,7 @@ class UpgradeBtn {
         this.grid = grid
         this.upgradeType = upgradeType || 1
 
-        this.tower = getTower(this.grid[0], this.grid[1])
+        this.tower = getTower(towerList,this.grid[0], this.grid[1])
 
         this.Init()
     }
@@ -255,7 +261,7 @@ class UpgradeBtn {
 
     // 判断是否符合条件
     animate() {
-        if (getMoney() < this.tower.upgradePara[this.upgradeType]["Cost"]["money"] || crystal < this.tower.upgradePara[this.upgradeType]["Cost"]["crystal"]) {
+        if (money < this.tower.upgradePara[this.upgradeType]["Cost"]["money"] || crystal < this.tower.upgradePara[this.upgradeType]["Cost"]["crystal"]) {
             this.IfAddClickEvent = 0;
             this.upgradeMoney.style.color = "red"
             this.upgradeCrystal.style.color = "red"
@@ -293,25 +299,26 @@ class Info {
 
     //@param grid 选中的地板地图坐标
 
-    constructor(grid) {
+    constructor() {
         this.Init()
-        this.grid = grid
-        this.information = getTower(this.grid[0], this.grid[1])
+        this.grid = []
+        this.information = {}
     }
 
     Init() {
         this.informationbar = document.createElement("div")
-        this.informationbar.style.userSelect = 'none';
-        this.informationbar.style.backgroundColor = "#131313"
-        this.informationbar.style.display = 'none';
-        this.informationbar.style.borderRadius = "5px"
-        this.informationbar.style.padding = "10px"
-        this.informationbar.style.width = "300px"
-        this.informationbar.style.height = "150px"
-        this.informationbar.style.position = 'fixed';
-        this.informationbar.style.bottom = '0px';
-        this.informationbar.style.right = '0px';
-
+        this.informationbar.style.cssText=`
+            user-select: none;
+            background-color: #131313;
+            display: none;
+            border-radius: 5px;
+            padding: 10px;
+            width: 300px;
+            height: 150px;
+            position: fixed;
+            bottom: 0px;
+            right: 0px;
+        `
         this.name = document.createElement("div")
         this.name.style.color = "white"
         this.name.style.fontSize = "32px"
@@ -348,7 +355,7 @@ class Info {
     onChange(grid) {
 
         this.grid = grid || this.grid
-        this.information = getTower(this.grid[0], this.grid[1])
+        this.information = getTower(towerList, this.grid[0], this.grid[1])
 
         //如果不是塔
         if (this.information.type == undefined) {
@@ -400,20 +407,20 @@ class WealthShow {
 
     Init() {
         this.container = document.createElement("div")
-        this.container.style.userSelect = 'none';
-        this.container.style.backgroundColor = "#131313"
-        this.container.style.borderRadius = "5px"
-        this.container.style.padding = "10px"
-        this.container.style.width = "50px"
-        this.container.style.height = "20px"
-        this.container.style.position = 'absolute';
-        this.container.style.textAlign = "center"
-        this.container.style.top = this.y + "px";
-        this.container.style.left = this.x + "px";
-        this.container.style.color = "white"
-
+        this.container.style.cssText=`
+            user-select: none;
+            background-color: #131313;
+            border-radius: 5px;
+            padding: 10px;
+            width: 50px;
+            height: 20px;
+            position: absolute;
+            text-align: center;
+            top: ${this.y}px;
+            left: ${this.x}px;
+            color: white
+        `
         this.container.innerHTML = this.variable
-
         document.getElementById("ui_container").appendChild(this.container)
     }
 
@@ -435,21 +442,22 @@ class DayShow {
 
     Init() {
         this.container = document.createElement("div")
-        this.container.style.userSelect = 'none';
-        this.container.style.backgroundColor = "#131313"
-        this.container.style.borderRadius = "5px"
-        this.container.style.opacity = "0.8"
-        this.container.style.padding = "10px"
-        this.container.style.width = "400px"
-        this.container.style.height = "90px"
-        this.container.style.position = 'absolute';
-        this.container.style.textAlign = "center"
-        this.container.style.top = "1px";
-        this.container.style.right = "1px";
-        this.container.style.color = "white"
-
+        this.container.style.cssText=`
+            user-select: none;
+            background-color: #131313;
+            border-radius: 5px;
+            opacity: 0.8;
+            padding: 10px;
+            width: 400px;
+            height: 50px;
+            position: absolute;
+            text-align: center;
+            top: 1px;
+            right: 1px;
+            color: white;
+        `
         this.days = document.createElement("a")
-        this.days.innerHTML = "天数undefined";
+        this.days.innerHTML = "天数1";
 
         this.timebar = document.createElement("div")
         this.timebar.style.backgroundColor = "gray"
@@ -490,7 +498,7 @@ class DayShow {
 
     onChange() {
         if (this.tick != tick) {
-            this.days.innerHTML = "天数" + day + 1;
+            this.days.innerHTML = `天数 ${day+1}`;
             this.daytimebar.style.width = (this.day_data[day][0] / eval(this.day_data[day].join("+")) * 100) + "%"
             this.afternoonbar.style.width = (this.day_data[day][1] / eval(this.day_data[day].join("+")) * 100) + "%"
             this.nightbar.style.width = (this.day_data[day][2] / eval(this.day_data[day].join("+")) * 100) + "%"
@@ -510,18 +518,18 @@ class StateButton {
 
     Init() {
         this.stateButton = document.createElement("div")
-        this.stateButton.style.userSelect = 'none';
-        this.stateButton.style.backgroundColor = "#414141";
-        this.stateButton.style.borderRadius = "5px";
-        this.stateButton.style.padding = "7px";
-        this.stateButton.style.width = "25px";
-        this.stateButton.style.height = "25px";
-        this.stateButton.style.position = 'absolute';
-        this.stateButton.style.display = 'flex';
-        this.stateButton.style.display = 'flex';
-        this.stateButton.style.right = this.right + 'px';
-        this.stateButton.style.top = this.y + 'px';
-
+        this.stateButton.style.cssText = `
+            user-select: none;
+            background-color: #414141;
+            border-radius: 5px;
+            padding: 7px;
+            width: 25px;
+            height: 25px;
+            position: absolute;
+            display: flex;
+            right: ${this.right}px;
+            top: ${this.y}px;
+        `
         this.image = toDom(imageUI[this.state][0]);
         this.image.style.width = "30px";
         if (this.state == "start") {
@@ -529,6 +537,10 @@ class StateButton {
         }
         this.image.style.height = "30px";
         this.image.style.pointerEvents = "none";
+
+        this.mask = document.createElement("div")
+        this.mask.style.cssText = "position:absolute; opacity:0; background-color:white;width:100%"
+        this.stateButton.appendChild(this.mask);
 
         this.stateButton.appendChild(this.image);
         document.getElementById("ui_container").appendChild(this.stateButton);
@@ -556,24 +568,36 @@ class StateButton {
         this.stateButton.style.border = "";
         this.stateButton.style.backgroundColor = "#414141";
     }
+    //被选择
+    onSelect(current_state) {
+        if (current_state === this.state) {
+            this.mask.style.opacity = "0.5"
+        } else {
+            this.mask.style.opacity = "0"
+        }
+    }
+
+    event(){
+        this.onSelect(STATE)
+    }
 }
 
-
-var towerInformation = new Info(currentGrid)
 export function UIInit() {
-    
+    var towerInformation = new Info();
     eventsListening.push([function () { towerInformation.onChange(currentGrid) }, "event"])
 
-    var dayShow = new DayShow(DAYS, tick)
+    var dayShow = new DayShow(TOTALDAYS, tick)
     eventsListening.push([function () { dayShow.onChange() }, "event"])
 
     const pauseBtn = new StateButton("pause", 470, 9)
+    eventsListening.push([function () { pauseBtn.event() }, "pause"])
     const startBtn = new StateButton("start", 430, 9)
+    eventsListening.push([function () { startBtn.event() }, "start"])
 
     const beginBtn = new BeginBtn()
 
-    const displaymoney = new WealthShow(getMoney(), 10, 0)
-    eventsListening.push([function () { displaymoney.onChange(getMoney()) }, "money"])
+    const displaymoney = new WealthShow(money, 10, 0)
+    eventsListening.push([function () { displaymoney.onChange(money) }, "moneyChange"])
 
     const displaycrystal = new WealthShow(crystal, 130, 0)
     eventsListening.push([function () { displaycrystal.onChange(crystal) }, "crystal"])
@@ -582,3 +606,5 @@ export function UIInit() {
         chooseButtonList.push(new Button(tower, towersChoose[tower], 60))
     }
 }
+
+//import 进来的变量享有共同指针

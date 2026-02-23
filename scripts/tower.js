@@ -1,8 +1,10 @@
-import { SIZE } from "./arguments.js";
 import { towerDataDict } from "./towers/towerDict.js"
-import { STATE, money, crystal, setMoney, setCrystal } from "./main.js";
+import { SIZE,STATE,
+    money, crystal, setMoney, setCrystal,
+    TOTALDAYS,day,floorsList,towerList } from "./gameArguments.js";
 import { gradeColor } from "./UI.js";
-import { toDom,currentGrid,getFloorType } from "./utils.js";
+import { toDom } from "./utils/covertToDOM.js";
+import { currentGrid, getFloorType } from "./utils/floorFuncs.js";
 import { createText } from "./text.js";
 import "./towers/arrowtower.js"
 import "./towers/goldmine.js"
@@ -10,26 +12,19 @@ import "./towers/multiplearrowtower.js"
 import "./towers/sunnytower.js"
 import "./towers/temporaryarrowtower.js"
 
-//目前存在的tower对象
-export var towerList = [];
-
 //添加塔
 export function add_tower(x,y,type){
-
-    if (!towerDataDict[type]["floor"].includes(getFloorType())) return;
+    if (!towerDataDict[type]["floor"].includes(getFloorType(floorsList))) return;
     for (var tower in towerList){
         if (towerList[tower].x == x && towerList[tower].y == y) return;
     }
 
     towerList.push(new Tower(x,y,type))
-
     setMoney(money - towerDataDict[type]["parameters"][0]["Cost"])
-
     createText(x*(SIZE+1), y*(SIZE+1), type, "#ffffff", 2, "normal")
 }
 
 export class Tower{
-    
     constructor(x,y,type,grade) {
         this.size = SIZE
         //相对地图格子上的坐标
@@ -50,8 +45,6 @@ export class Tower{
 
         //缩放动画
         this.animate = 0
-
-        this.attacktime = 0
     
         this.image = towerDataDict[this.type]["image"]
 
@@ -119,15 +112,8 @@ export class Tower{
 
     // 每一个攻击时间里的事件
     events(){
-        if (STATE == "pause" || day == DAYS.length) return;
-        if (this.attacktime >= this.parameters["AttackTime"]){
-            this.event(this)
-            this.attacktime = 0
-        }else{
-            this.attacktime += 0.01
-
-        }
-        
+        if (STATE == "pause" || day == TOTALDAYS.length) return;
+        this.event(this)
     }
 }
 

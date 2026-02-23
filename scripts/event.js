@@ -1,36 +1,60 @@
-import { monsterList } from "./monster.js";
-import { towerList } from "./tower.js";
-import { cannonsList } from "./cannon.js";
+/*
+  用于处理事件，包括渲染
+*/
+import { STATE,TOTALDAYS,day,tick, setDay, setTick,towerList,cannonsList,monsterList,floorsList } from "./gameArguments.js";
 // [function,id]
 export var eventsListening = [];
 
 function monster_event(){
-    for (var monster in monsterList){
-        monsterList[monster].event()
+    for (const monsterObj of monsterList){
+        monsterObj.event()
     }
 }
 eventsListening.push([monster_event,"monster"])
 
 function tower_events(){
-    for (var tower in towerList){
-        towerList[tower].events()
+    for (const towerObj of towerList){
+        towerObj.events()
     }
 }
 eventsListening.push([tower_events,"tower"])
 
 function cannon_event(){
-    for (var cannon in cannonsList){
-        cannonsList[cannon].event()
+    for (const cannonObj of cannonsList){
+        cannonObj.event()
     }
 }
 eventsListening.push([cannon_event,"cannon"])
 
+function map_event(){
+    for (const floorObj of floorsList){
+        floorObj.event()
+    }
+}
+eventsListening.push([map_event,"Map_event"])
+
+//时间推进
+function Time(){
+    if (STATE == "pause" || day == TOTALDAYS.length) return;
+    setTick(tick + 1)
+    if (tick < getDayLenth(day)) return;
+    setDay(day + 1);
+};
+eventsListening.push([Time, "main_event"])
+
+function getDayLenth(current_day){
+    var dayLenth = 0;
+    for (const day in TOTALDAYS){
+        if (day > current_day) return;
+        dayLenth += eval(TOTALDAYS[day].join("+"))
+    }
+    return dayLenth
+}
+
 //执行添加的事件
 export function runEvents() {
-    console.log(eventsListening)
     if (eventsListening == 0) return;
-    for (var events in eventsListening) {
-        eventsListening[events][0]()
+    for (const event of eventsListening) {
+        event[0]()
     }
-    requestAnimationFrame(runEvents)
 };
