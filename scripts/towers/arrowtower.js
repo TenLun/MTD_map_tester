@@ -1,18 +1,14 @@
 import { addTowerData } from "./towerDict.js";
 import { createCannon } from "../cannon.js";
 import { Angle } from "../utils/animation.js";
-import { monsterList } from "../gameArguments.js";
+import { monsterList, tick } from "../gameArguments.js";
 
-var attackTime = 0;
+var attackTime = tick;
 
 //普通箭塔
 function events(towerObject){
-    if (attackTime >= towerObject.parameters["AttackTime"]){
-        attackTime = 0;
-    }else{
-        attackTime += 0.01;
-        return;
-    }
+    if ( (tick - attackTime)/60 < towerObj.parameters["AttackTime"]) return;
+
     for (monster in monsterList) {
         if (Math.pow(monsterList[monster].x-(towerObject.canvasX + towerObject.size/2),2)+
             Math.pow(monsterList[monster].y-(towerObject.canvasY+towerObject.size/2),2) <= Math.pow(towerObject.parameters['AttackRange'],2)){
@@ -23,9 +19,10 @@ function events(towerObject){
                 10,
                 towerObject.parameters['AttackPower']
             )
-            return;
+            break;
         }
     }
+    attackTime = tick;//重置计时器
 }
 
 //升级技能树(当前等级可以升哪个等级)

@@ -1,5 +1,13 @@
 import { addTowerData } from "./towerDict.js";
+import { monsterList,tick } from "../gameArguments.js";
+import { createCannon } from "../cannon.js"
+import { Angle } from "../utils/animation.js"
+
+var attackTime = tick;
+
 function events(tower){
+    if ( (tick - attackTime)/60 < towerObj.parameters["AttackTime"]) return;
+
     for (monster in monsterList) {
         if (Math.pow(monsterList[monster].x-(tower.canvasX+tower.size/2),2)+
             Math.pow(monsterList[monster].y-(tower.canvasY+tower.size/2),2) <= Math.pow(tower.parameters['AttackRange'],2)){
@@ -10,9 +18,10 @@ function events(tower){
                 tower.parameters['AttackPower']
             )
             tower.hurt(2)
-            return;
+            break;
         }
     }
+    attackTime = tick;//重置计时器
     
 }
 //升级技能树(当前等级可以升哪个等级)

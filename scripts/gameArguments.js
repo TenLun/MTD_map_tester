@@ -44,7 +44,7 @@ export var crystal = level_data["crystal"] || 0
 export function setCrystal(value){
     crystal = value
 }
-export var TOTALDAYS = level_data["total_days"] || 1 //数据内单位是tick
+export const TOTALDAYS = level_data["total_days"] || 1 //数据内单位是tick
 
 export var monsterList = [];
 export var towerList = []; //目前存在的tower对象

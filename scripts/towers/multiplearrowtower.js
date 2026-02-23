@@ -1,16 +1,25 @@
 import { addTowerData } from "./towerDict.js";
+import { monsterList,tick } from "../gameArguments.js";
+import { createCannon } from "../cannon.js"
+import { Angle } from "../utils/animation.js"
+
+var attackTime = tick;
+
 function events(tower) {
-    for (monster in monsterList) {
-        if (Math.pow(monsterList[monster].x + monsterList[monster].size / 2 - (tower.canvasX + tower.size / 2), 2) +
-            Math.pow(monsterList[monster].y + monsterList[monster].size / 2 - (tower.canvasY + tower.size / 2), 2) <= Math.pow(tower.parameters['AttackRange'], 2)) {
-            var direction = Angle((tower.canvasX + tower.size / 2), (tower.canvasY + tower.size / 2), monsterList[monster].x, monsterList[monster].y)
+    if ( (tick - attackTime)/60 < towerObj.parameters["AttackTime"]) return;
+
+    for (const monsterObj of monsterList) {
+        if (Math.pow(monsterObj.x + monsterObj.size / 2 - (tower.canvasX + tower.size / 2), 2) +
+            Math.pow(monsterObj.y + monsterObj.size / 2 - (tower.canvasY + tower.size / 2), 2) <= Math.pow(tower.parameters['AttackRange'], 2)) {
+            var direction = Angle((tower.canvasX + tower.size / 2), (tower.canvasY + tower.size / 2), monsterObj.x, monsterObj.y)
             for (i_ in Array(tower.parameters['BulletNumber']).fill(1)) {
                 createCannon((tower.canvasX + tower.size / 2), (tower.canvasY + tower.size / 2),
                     (direction - 10 * tower.parameters['BulletNumber'] / 2 + 10 * i_), 10, tower.parameters['AttackPower'])
             }
         }
-        return;
+        break;
     }
+    attackTime = tick;//重置计时器
 }
 //升级技能树(当前等级可以升哪个等级)
 var upgradeTree = {

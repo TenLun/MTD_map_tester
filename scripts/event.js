@@ -45,9 +45,11 @@ eventsListening.push([Time, "main_event"])
 function getDayLenth(current_day){
     var dayLenth = 0;
     for (const day in TOTALDAYS){
-        if (day > current_day) return;
-        dayLenth += eval(TOTALDAYS[day].join("+"))
+        if (day > current_day) break;
+        dayLenth += eval(TOTALDAYS[day].join("+"));
+        console.log(dayLenth)
     }
+    
     return dayLenth
 }
 

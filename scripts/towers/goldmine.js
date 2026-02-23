@@ -1,8 +1,15 @@
+import { setMoney, money,tick } from "../gameArguments.js";
 import { addTowerData } from "./towerDict.js";
 
+var attackTime = tick;
+
 function events(tower){
-    money += tower.parameters['Gold']
+    if ( (tick - attackTime)/60 < towerObj.parameters["AttackTime"]) return;
+
+    setMoney(money + tower.parameters['Gold']);
     createText(tower.canvasX, tower.canvasY, tower.parameters['Gold']+"G", "#ffff00",1.5,"production")
+
+    attackTime = tick;//重置计时器
 }
 //升级技能树(当前等级可以升哪个等级)
 var upgradeTree = {
@@ -15,7 +22,7 @@ var parameters = {
     "0":{
         "Cost" : 50,
         'AttackTime' : 5,
-        'Gold' : 20,
+        'Gold' : 20, //money
         'MaxHealth' : 200
     },
     "1":{

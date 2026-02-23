@@ -2,7 +2,7 @@ import { addTowerData } from "./towerDict.js";
 import { setMoney,money,crystal,setCrystal,tick } from "../gameArguments.js";
 import { createText } from "../text.js";
 
-var attackTime = tick
+var attackTime = tick;
 
 function events(towerObj){
     if ( (tick - attackTime)/60 < towerObj.parameters["AttackTime"]) return;

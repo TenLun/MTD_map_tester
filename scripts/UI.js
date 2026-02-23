@@ -457,7 +457,7 @@ class DayShow {
             color: white;
         `
         this.days = document.createElement("a")
-        this.days.innerHTML = "天数1";
+        this.days.innerHTML = "天数0";
 
         this.timebar = document.createElement("div")
         this.timebar.style.backgroundColor = "gray"
@@ -498,7 +498,7 @@ class DayShow {
 
     onChange() {
         if (this.tick != tick) {
-            this.days.innerHTML = `天数 ${day+1}`;
+            this.days.innerHTML = `天数 ${day}`;
             this.daytimebar.style.width = (this.day_data[day][0] / eval(this.day_data[day].join("+")) * 100) + "%"
             this.afternoonbar.style.width = (this.day_data[day][1] / eval(this.day_data[day].join("+")) * 100) + "%"
             this.nightbar.style.width = (this.day_data[day][2] / eval(this.day_data[day].join("+")) * 100) + "%"
@@ -539,7 +539,15 @@ class StateButton {
         this.image.style.pointerEvents = "none";
 
         this.mask = document.createElement("div")
-        this.mask.style.cssText = "position:absolute; opacity:0; background-color:white;width:100%"
+        this.mask.style.cssText = `
+            position:absolute; 
+            top:0px;
+            left:0px;
+            opacity:0;
+            background-color:white;
+            width:100%;
+            height:100%
+        `
         this.stateButton.appendChild(this.mask);
 
         this.stateButton.appendChild(this.image);
@@ -570,7 +578,7 @@ class StateButton {
     }
     //被选择
     onSelect(current_state) {
-        if (current_state === this.state) {
+        if (current_state == this.state) {
             this.mask.style.opacity = "0.5"
         } else {
             this.mask.style.opacity = "0"
