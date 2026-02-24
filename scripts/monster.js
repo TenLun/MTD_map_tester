@@ -2,7 +2,7 @@ import { monsterDataDict } from "./gameDatas/gameResouces.js";
 import "./gameDatas/monsters/square.js";
 
 import { toDom } from "./utils/covertToDOM.js";
-import { toGridSingle,toPosition } from "./utils/convetCoords.js";
+import { toPosition } from "./utils/convetCoords.js";
 import { CubicOut, Angle } from "./utils/animation.js";
 import { STATE,TOTALDAYS,day,
     towerList,floorsList,monsterList,target, 
@@ -31,19 +31,19 @@ export class Monster {
 
         this.id = Math.ceil(Math.random()*10000000)
 
-        //对于ctx的像素位置 (原点左上) 真实坐标 px
+        //对于ctx的像素位置 (原点左上) 怪物目标坐标 px
         this.canvasX = x 
         this.canvasY = y 
 
         this.type = type
 
         this.image = monsterDataDict[this.type]["image"]
-        //this.event = monsterDataDict[this.type]["event"]
+        this.events = monsterDataDict[this.type]["event"]
 
         this.hp = this.size
 
         //动画部分
-        this.animateX = this.canvasX //渲染位置
+        this.animateX = this.canvasX //渲染位置 真实坐标 px
         this.animateY = this.canvasY
         this.i = [0,this.size]
         this.size = 0
@@ -52,10 +52,10 @@ export class Monster {
     render(canvasCtx){
         canvasCtx.save();
         canvasCtx.globalAlpha = 0.5;
-        canvasCtx.translate(this.canvasX +this.size/2,this.canvasY+this.size/2)
-        canvasCtx.rotate(this.direction*Math.PI/180);
-        canvasCtx.translate(-this.canvasX -this.size/2, -this.canvasY-this.size/2)
-        canvasCtx.drawImage(toDom(this.image), this.canvasX, this.canvasY, this.size, this.size)
+        canvasCtx.translate(this.canvasX + this.size/2, this.canvasY + this.size/2) //将网格原点移动至自己中心
+        canvasCtx.rotate(this.direction*Math.PI/180); //朝向 this.direction
+        canvasCtx.translate(-this.canvasX -this.size/2, -this.canvasY-this.size/2) //将网格原点移动回去
+        canvasCtx.drawImage(toDom(this.image), this.canvasX, this.canvasY, this.size+5, this.size+5)
         canvasCtx.restore();
         this.animate()
     }
@@ -78,24 +78,25 @@ export class Monster {
      */
     find_path(target,current_x,current_y){
         this.move(
-            Angle([this.canvasX,this.canvasY],toPosition(floorsList,target.position)),
-            this.size/100 );
+            Angle([this.canvasX,this.canvasY],toPosition(target.position, SIZE)),
+            this.size/5 );
     }
 
     //事件，被子弹击打，碰到塔/地板
     event(){
         if (STATE == "pause" || day == TOTALDAYS.length) return;
         //碰到塔
+        this.events()
         for (const towerObj of towerList){
-            if (!( (toGridSingle(this.canvasX+this.size-2,SIZE) == towerObj.x || toGridSingle(this.canvasX,SIZE) == towerObj.x) &&
-                (toGridSingle(this.canvasY+this.size-2,SIZE) == towerObj.y || toGridSingle(this.canvasY,SIZE) == towerObj.y))) break;
+            //怪物右边在塔左边的右边||怪物左边在塔右边的左边  下边碰上边||上碰下
+            if (!(( this.canvasX + this.size >= towerObj.canvasX && this.canvasX <= towerObj.canvasX + towerObj.size) &&
+                (  this.canvasY + this.size >= towerObj.canvasY && this.canvasY <= towerObj.canvasY + towerObj.size))) continue;
             this.damage(towerObj)
             this.move(
-                Angle([this.canvasX,this.canvasY],toPosition(floorsList,target[0].position)),
+                Angle([this.canvasX,this.canvasY],toPosition(target[0].position, SIZE)),
                 -20);
         }
         this.find_path(target[0])
-        
         if (this.hp <= 0) {
             this.destroy()
         }
@@ -118,8 +119,8 @@ export class Monster {
             this.size = this.i[1]*CubicOut(1,0,1,this.i[0])
             this.i[0] += 0.1
         }
-        this.animateX += ( this.canvasX - this.animateX ) / 1000
-        this.animateY += ( this.canvasX - this.animateY ) / 1000
+        //this.animateX += ( this.canvasX - this.animateX ) / 10
+        //this.animateY += ( this.canvasY - this.animateY ) / 10
     }
 
     destroy(){
@@ -135,7 +136,7 @@ export class Monster {
 export function spawn_monster(){
     for (var floor in floorsList){
         if (floorsList[floor].type == "spawner"){
-            add_monster(floorsList[floor].canvasX,floorsList[floor].canvasY,'square', Math.ceil(Math.random()*30 +30))
+            add_monster(floorsList[floor].canvasX,floorsList[floor].canvasY,'square', Math.ceil(30))
         }
     }
 }

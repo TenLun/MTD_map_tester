@@ -1,11 +1,22 @@
-//将图片转换成dom
+/**
+ * 将图片转换成img
+ * @param {string} src 
+ * @returns {HTMLImageElement}
+ */
 export function toDom(src){
     var ImageDom = new Image();
     ImageDom.src = src;
     return ImageDom;
 }
 
-//将图片转换成dom(带颜色)
+/**
+ * 将图片转换成dom(带颜色)
+ * @param {string} src 
+ * @param {number} width 
+ * @param {number} height 
+ * @param {string} color 
+ * @returns {HTMLDivElement}
+ */
 export function imgToDom(src,width,height,color){
     var wrapper = document.createElement("div");
     wrapper.style.display = "inline-block";
