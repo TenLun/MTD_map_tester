@@ -3,11 +3,16 @@
  * 这个文件存放的是游戏实时的公共数据
  */
 
+import { Cannon } from "./cannon.js"
+import { Ground } from "./map.js"
+import { Monster } from "./monster.js"
 import { Tower } from "./tower.js"
 
 //地图格子大小(包括边界) 以后变为放大倍率
 export const SIZE = 60
 export const OFFSET = [70, 30] //地图偏移量 [x,y] px
+export const canvasWidth = 1448; //地图大小
+export const canvasHeight = 750;
 
 //怪物目标（日光塔）格子坐标（们）
 export var target = []
@@ -50,13 +55,20 @@ export function setCrystal(value){
 }
 export const TOTALDAYS = level_data["total_days"] || 1 //数据内单位是tick
 
+/** @type {Monster[]} 目前存在的monster对象 */
 export var monsterList = [];
-/**
- * @type {Tower[]} 目前存在的tower对象
- */
-export var towerList = []; //
+/** @type {Tower[]} 目前存在的tower对象 */
+export var towerList = []; 
+/** @type {Ground[]} 目前存在的map floor ground对象 */
 export var floorsList = [];
+/** @type {Cannon[]} 目前存在的子弹对象 */
 export var cannonsList = [];
+
+/** 当前选择的塔 */
+export var currentTower = ""
+export function setCurrentTower(value){
+    currentTower = value
+}
 
 // export function getGameArguments(){
 //     return {

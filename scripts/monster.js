@@ -3,11 +3,12 @@ import "./gameDatas/monsters/square.js";
 
 import { toDom } from "./utils/covertToDOM.js";
 import { toPosition } from "./utils/convetCoords.js";
-import { CubicOut, Angle } from "./utils/animation.js";
+import { CubicOut, Angle, ifIn } from "./utils/mathFuncs.js";
 import { STATE,TOTALDAYS,day,
     towerList,floorsList,monsterList,target, 
     SIZE} from "./gameArguments.js";
 import { Tower } from "./tower.js";
+import { createText } from "./text.js";
 /*
 position
 type
@@ -55,7 +56,7 @@ export class Monster {
         canvasCtx.translate(this.canvasX + this.size/2, this.canvasY + this.size/2) //将网格原点移动至自己中心
         canvasCtx.rotate(this.direction*Math.PI/180); //朝向 this.direction
         canvasCtx.translate(-this.canvasX -this.size/2, -this.canvasY-this.size/2) //将网格原点移动回去
-        canvasCtx.drawImage(toDom(this.image), this.canvasX, this.canvasY, this.size+5, this.size+5)
+        canvasCtx.drawImage(toDom(this.image), this.canvasX, this.canvasY, this.size, this.size)
         canvasCtx.restore();
         this.animate()
     }
@@ -79,7 +80,7 @@ export class Monster {
     find_path(target,current_x,current_y){
         this.move(
             Angle([this.canvasX,this.canvasY],toPosition(target.position, SIZE)),
-            this.size/5 );
+            this.size/50 );
     }
 
     //事件，被子弹击打，碰到塔/地板
@@ -88,9 +89,11 @@ export class Monster {
         //碰到塔
         this.events()
         for (const towerObj of towerList){
+            if (towerObj.state == "dead") continue;
             //怪物右边在塔左边的右边||怪物左边在塔右边的左边  下边碰上边||上碰下
-            if (!(( this.canvasX + this.size >= towerObj.canvasX && this.canvasX <= towerObj.canvasX + towerObj.size) &&
-                (  this.canvasY + this.size >= towerObj.canvasY && this.canvasY <= towerObj.canvasY + towerObj.size))) continue;
+            if ( !ifIn(this,towerObj) ) continue;
+            // if (!(( this.canvasX + this.size >= towerObj.canvasX && this.canvasX <= towerObj.canvasX + towerObj.size) &&
+            //     (   this.canvasY + this.size >= towerObj.canvasY && this.canvasY <= towerObj.canvasY + towerObj.size))) continue;
             this.damage(towerObj)
             this.move(
                 Angle([this.canvasX,this.canvasY],toPosition(target[0].position, SIZE)),

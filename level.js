@@ -2,7 +2,7 @@ level_data = {
     "name": "test",
     "width": 10,
     "height": 10,
-    "money": 130,
+    "money": 2000,
     "total_days": [
         [100, 900, 2800],
         [200, 200, 300],

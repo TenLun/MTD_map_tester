@@ -3,9 +3,9 @@ import { getCurrentPosition,mouseDown } from "./utils/mouse.js";
 import { currentGrid,setCurrentGrid,getTower } from "./utils/floorFuncs.js";
 
 import { add_tower } from "./tower.js";
-import { currentTower,changeTowerInfo,chooseButtonList, setCurrentTower } from "./UI.js";
+import { changeTowerInfo,chooseButtonList } from "./UI.js";
 
-import { SIZE, towerList } from "./gameArguments.js";
+import { currentTower, SIZE, towerList , setCurrentTower} from "./gameArguments.js";
 import { towerDataDict } from "./gameDatas/gameResouces.js";
 import { floorDataDict } from "./gameDatas/floors/floorDict.js";
 import "./gameDatas/floors/ground.js"

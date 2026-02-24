@@ -11,9 +11,12 @@ const tower_data = level_data["tower"]
 const level_width = level_data["width"]
 const level_height = level_data["height"]
 
+//开始
 async function start() {
+    //加载扩展
     await setTowerDataInit(TowerPlugins)
-    await setMonsterDataInit(MonsterPlugins)
+    await setMonsterDataInit(MonsterPlugins) 
+    // //添加关卡已有元素
     floor_init(floor_data,floorsList);
     tower_init(tower_data,towerList);
     setTarget(tower_data);
@@ -21,6 +24,7 @@ async function start() {
     MainLoop()
 }
 
+//主游戏循环
 function MainLoop() {
     runEvents();
     renderAll();

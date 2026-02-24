@@ -21,20 +21,3 @@ export function toPosition(gridPos,size){
     var canvasY = gridPos[1]*size
     return [canvasX,canvasY]
 }
-
-// export function toPosition(floorsList,position){
-//     for (const floorObj of floorsList){
-//         if (floorObj.position.toString() == position.toString()){ //我真服js这比较
-//             return [floorObj.canvasX + floorObj.width/2, floorObj.canvasY + floorObj.height/2]
-//         } 
-//     };
-
-//     return false
-// };    
-
-// for (const floorObj of floorsList){
-//     if (floorObj.canvasX <= x && floorObj.canvasX+floorObj.width >= x &&
-//         floorObj.canvasY <= y && floorObj.canvasY+floorObj.height >= y){
-//         return [floorObj.x,floorObj.y]
-//     } 
-// };

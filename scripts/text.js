@@ -1,7 +1,7 @@
 //UI使用Dom
 
 import { MAP_CONTAINER } from "./utils/getElements.js"
-import { CubicOut } from "./utils/animation.js"
+import { CubicOut } from "./utils/mathFuncs.js"
 
 var textsList = []
 

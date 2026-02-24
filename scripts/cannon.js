@@ -1,5 +1,5 @@
-export var cannonDict={}
-
+import { cannonsList,STATE,day,TOTALDAYS,monsterList,canvasHeight,canvasWidth } from "./gameArguments.js"
+import { toDom } from "./utils/covertToDOM.js"
 /**
  * 
  * @param {number} x //坐标
@@ -12,12 +12,12 @@ export function createCannon(x,y,direction,size,damage){
     cannonsList.push(new Cannon(x,y,direction,size,damage))
 }
 
-class Cannon{
+export class Cannon{
     
     constructor(x,y,direction,size,damage) {
         //相对ctx坐标
-        this.x = x
-        this.y = y
+        this.canvasX = x
+        this.canvasY = y
 
         this.size = size || 10
         this.direction = direction
@@ -27,29 +27,29 @@ class Cannon{
     }
 
     render(canvasCtx){
-        canvasCtx.drawImage(toDom("resources/cannon/CircalBullet.png"), this.x, this.y, this.size, this.size)
+        canvasCtx.drawImage(toDom("resources/cannon/CircalBullet.png"), this.canvasX, this.canvasY, this.size, this.size)
     }
     
-    //打到怪物
+    
     event(){
-        if (STATE == "pause" || day == DAYS.length) return;
+        if (STATE == "pause" || day == TOTALDAYS.length) return;
         this.move(this.direction,this.size)
-        for (monster in monsterList){
-            if (((this.x <= monsterList[monster].x+(monsterList[monster].size/2)) && (this.x >= monsterList[monster].x-(monsterList[monster].size/2))) &&
-                ((this.y <= monsterList[monster].y+(monsterList[monster].size/2)) && (this.y >= monsterList[monster].y-(monsterList[monster].size/2)))){
-                    monsterList[monster].hurt(this.damage);
+        for (const monsterObj of monsterList){//打到怪物
+            if (((this.canvasX <= monsterObj.canvasX + monsterObj.size) && (this.canvasX >= monsterObj.canvasX - monsterObj.size)) &&
+                ((this.canvasY <= monsterObj.canvasY + monsterObj.size) && (this.canvasY >= monsterObj.canvasY - monsterObj.size))){
+                    monsterObj.hurt(this.damage);
                     this.destroy();
                     break;
             }
         }
-        if (this.x < 0 || this.x > canvasHeight || this.y < 0 || this.y > canvasWidth){
+        if (this.canvasX < 0 || this.canvasX > canvasHeight || this.canvasY < 0 || this.canvasY > canvasWidth){
             this.destroy()
         }
     }
 
     move(direction,length){
-        this.x += Math.cos((direction)*Math.PI/180)*length; 
-        this.y += Math.sin((direction)*Math.PI/180)*length; 
+        this.canvasX += Math.cos((direction)*Math.PI/180)*length; 
+        this.canvasY += Math.sin((direction)*Math.PI/180)*length; 
     }
 
     //销毁自己

@@ -1,25 +1,32 @@
 import { createCannon } from "../../cannon.js";
-import { Angle } from "../../utils/animation.js";
+import { Angle, distancePow } from "../../utils/mathFuncs.js";
 import { monsterList, tick } from "../../gameArguments.js";
+import { Tower } from "../../tower.js";
 
 var attackTime = tick;
 
-//普通箭塔
+/**
+ * 每一次渲染触发的事件
+ * @param {Tower} towerObj 
+ * @returns 
+ */
 function events(towerObj){
     if ( (tick - attackTime)/60 < towerObj.parameters["AttackTime"]) return;
 
-    for (monster in monsterList) {
-        if (Math.pow(monsterList[monster].x-(towerObj.canvasX + towerObj.size/2),2)+
-            Math.pow(monsterList[monster].y-(towerObj.canvasY+towerObj.size/2),2) <= Math.pow(towerObj.parameters['AttackRange'],2)){
-            createCannon(
-                (towerObj.canvasX+towerObj.size/2),(towerObj.canvasY+towerObj.size/2),
-                Angle([(towerObj.canvasX+towerObj.size/2), (towerObj.canvasY+towerObj.size/2)]
-                , [monsterList[monster].x, monsterList[monster].y]),
-                10,
-                towerObj.parameters['AttackPower']
-            )
-            break;
+    for (const monsterObj of monsterList) {
+        if ( distancePow(monsterObj,towerObj) > Math.pow(towerObj.parameters['AttackRange'],2) ) {
+            console.log(distancePow(monsterObj,towerObj))
+            continue;
         }
+        createCannon(
+            (towerObj.canvasX+towerObj.size/2),(towerObj.canvasY+towerObj.size/2),
+            Angle(
+                [(towerObj.canvasX+towerObj.size/2), (towerObj.canvasY+towerObj.size/2)],
+                [monsterObj.canvasX, monsterObj.canvasY]),
+            10,
+            towerObj.parameters['AttackPower']
+        )
+        break;
     }
     attackTime = tick;//重置计时器
 }

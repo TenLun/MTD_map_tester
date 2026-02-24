@@ -1,19 +1,19 @@
 import { monsterList,tick } from "../../gameArguments.js";
 import { createCannon } from "../../cannon.js"
-import { Angle } from "../../utils/animation.js"
+import { Angle } from "../../utils/mathFuncs.js"
 
 var attackTime = tick;
 
-function events(tower) {
+function events(towerObj) {
     if ( (tick - attackTime)/60 < towerObj.parameters["AttackTime"]) return;
 
     for (const monsterObj of monsterList) {
-        if (Math.pow(monsterObj.x + monsterObj.size / 2 - (tower.canvasX + tower.size / 2), 2) +
-            Math.pow(monsterObj.y + monsterObj.size / 2 - (tower.canvasY + tower.size / 2), 2) <= Math.pow(tower.parameters['AttackRange'], 2)) {
-            var direction = Angle((tower.canvasX + tower.size / 2), (tower.canvasY + tower.size / 2), monsterObj.x, monsterObj.y)
-            for (i_ in Array(tower.parameters['BulletNumber']).fill(1)) {
-                createCannon((tower.canvasX + tower.size / 2), (tower.canvasY + tower.size / 2),
-                    (direction - 10 * tower.parameters['BulletNumber'] / 2 + 10 * i_), 10, tower.parameters['AttackPower'])
+        if (Math.pow(monsterObj.canvasX + monsterObj.size / 2 - (towerObj.canvasX + towerObj.size / 2), 2) +
+            Math.pow(monsterObj.canvasY + monsterObj.size / 2 - (towerObj.canvasY + towerObj.size / 2), 2) <= Math.pow(towerObj.parameters['AttackRange'], 2)) {
+            var direction = Angle((towerObj.canvasX + towerObj.size / 2), (towerObj.canvasY + towerObj.size / 2), monsterObj.canvasX, monsterObj.canvasY)
+            for (const i_ in Array(towerObj.parameters['BulletNumber']).fill(1)) {
+                createCannon((towerObj.canvasX + towerObj.size / 2), (towerObj.canvasY + towerObj.size / 2),
+                    (direction - 10 * towerObj.parameters['BulletNumber'] / 2 + 10 * i_), 10, towerObj.parameters['AttackPower'])
             }
         }
         break;

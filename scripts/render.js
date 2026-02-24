@@ -1,6 +1,6 @@
 import { MAP_CONTAINER } from "./utils/getElements.js";
 import { OFFSET,
-    floorsList,cannonsList,monsterList,towerList } from "./gameArguments.js";
+    floorsList,cannonsList,monsterList,towerList,canvasWidth,canvasHeight } from "./gameArguments.js";
 
 const mainCanvas = document.getElementById("main_canvas"); //最终渲染的canvas
 const mainCtx = mainCanvas.getContext('2d');
@@ -8,8 +8,8 @@ const mainCtx = mainCanvas.getContext('2d');
 const cacheCanvas = document.createElement('canvas'); // 新建一个 canvas 作为缓存 canvas
 const cacheCtx = cacheCanvas.getContext("2d");
 
-const canvasWidth = cacheCanvas.width = mainCanvas.width = 1448;
-const canvasHeight = cacheCanvas.height = mainCanvas.height = 750;
+cacheCanvas.width  = mainCanvas.width  = canvasWidth;
+cacheCanvas.height = mainCanvas.height = canvasHeight;
 //全部渲染
 export function renderAll() {
     cacheCtx.clearRect(0, 0, canvasWidth, canvasHeight);

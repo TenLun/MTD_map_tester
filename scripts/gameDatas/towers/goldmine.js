@@ -2,11 +2,11 @@ import { setMoney, money,tick } from "../../gameArguments.js";
 
 var attackTime = tick;
 
-function events(tower){
+function events(towerObj){
     if ( (tick - attackTime)/60 < towerObj.parameters["AttackTime"]) return;
 
-    setMoney(money + tower.parameters['Gold']);
-    createText(tower.canvasX, tower.canvasY, tower.parameters['Gold']+"G", "#ffff00",1.5,"production")
+    setMoney(money + towerObj.parameters['Gold']);
+    createText(towerObj.canvasX, towerObj.canvasY, towerObj.parameters['Gold']+"G", "#ffff00",1.5,"production")
 
     attackTime = tick;//重置计时器
 }

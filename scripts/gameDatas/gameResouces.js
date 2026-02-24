@@ -9,12 +9,11 @@ export function addTowerData(key,value){
 }
 
 export var monsterDataDict={}
-/**
- * 用于添加数据
- */
 export function addMonsterData(key,value){
     monsterDataDict[key]=value
 }
+
+export var cannonDict={}
 
 //参数的值
 export const imageUI = {
