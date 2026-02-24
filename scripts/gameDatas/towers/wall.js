@@ -1,5 +1,3 @@
-import { addTowerData } from "../gameArguments.js";
-
 function events(tower){
 }
 
@@ -24,11 +22,12 @@ var parameters = {
         'MaxHealth' : 300
     }
 }
-addTowerData("wall", {
-    "name":"goldmine",
+const TOWERDATA = {
+    "type":"wall",
     "events":events,
     "parameters":parameters,
     "upgradetree":upgradeTree,
     "floor":"brokenground", //可以被放置的地板类型
     "image":"resources/towers/Wall.png"
-})
+}
+export default TOWERDATA

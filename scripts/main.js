@@ -1,5 +1,5 @@
 import { setTarget,towerList,floorsList } from "./gameArguments.js";
-import "./towers/towerDictPlugin.js"
+import { setTowerDataInit,TowerPlugins,setMonsterDataInit,MonsterPlugins } from "./gameDatas/DictPlugin.js";
 import { runEvents } from "./event.js";
 import { Tower } from "./tower.js";
 import { Ground } from "./map.js";
@@ -11,7 +11,9 @@ const tower_data = level_data["tower"]
 const level_width = level_data["width"]
 const level_height = level_data["height"]
 
-function start() {
+async function start() {
+    await setTowerDataInit(TowerPlugins)
+    await setMonsterDataInit(MonsterPlugins)
     floor_init(floor_data,floorsList);
     tower_init(tower_data,towerList);
     setTarget(tower_data);

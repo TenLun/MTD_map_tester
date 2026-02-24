@@ -1,11 +1,12 @@
-import { monsterDataDict } from "./monsters/monsterDict.js";
-import "./monsters/square.js";
+import { monsterDataDict } from "./gameDatas/gameResouces.js";
+import "./gameDatas/monsters/square.js";
 
 import { toDom } from "./utils/covertToDOM.js";
-import { toGrid,toPosition } from "./utils/convetCoords.js";
+import { toGridSingle,toPosition } from "./utils/convetCoords.js";
 import { CubicOut, Angle } from "./utils/animation.js";
 import { STATE,TOTALDAYS,day,
-    towerList,floorsList,monsterList,target } from "./gameArguments.js";
+    towerList,floorsList,monsterList,target, 
+    SIZE} from "./gameArguments.js";
 import { Tower } from "./tower.js";
 /*
 position
@@ -86,14 +87,12 @@ export class Monster {
         if (STATE == "pause" || day == TOTALDAYS.length) return;
         //碰到塔
         for (const towerObj of towerList){
-            if ( (toGrid(floorsList, this.canvasX+this.size-2,this.canvasY)[0] == towerObj.x || toGrid(floorsList, this.canvasX,this.canvasY)[0] == towerObj.x) &&
-            (toGrid(floorsList, this.canvasX,this.canvasY+this.size-2)[1] == towerObj.y || toGrid(floorsList, this.canvasX,this.canvasY)[1] == towerObj.y)){
-                this.damage(towerObj)
-                this.move(
-                    Angle([this.canvasX,this.canvasY],toPosition(floorsList,target[0].position)),
-                    -20
-                )
-            }
+            if (!( (toGridSingle(this.canvasX+this.size-2,SIZE) == towerObj.x || toGridSingle(this.canvasX,SIZE) == towerObj.x) &&
+                (toGridSingle(this.canvasY+this.size-2,SIZE) == towerObj.y || toGridSingle(this.canvasY,SIZE) == towerObj.y))) break;
+            this.damage(towerObj)
+            this.move(
+                Angle([this.canvasX,this.canvasY],toPosition(floorsList,target[0].position)),
+                -20);
         }
         this.find_path(target[0])
         

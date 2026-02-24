@@ -1,7 +1,9 @@
 /**
  * 没有import放心导入，变量指针是一样的
- * 这个文件存放的是游戏的公共数据
+ * 这个文件存放的是游戏实时的公共数据
  */
+
+import { Tower } from "./tower.js"
 
 //地图格子大小 以后变为放大倍率
 export const SIZE = 60
@@ -49,14 +51,13 @@ export function setCrystal(value){
 export const TOTALDAYS = level_data["total_days"] || 1 //数据内单位是tick
 
 export var monsterList = [];
-export var towerList = []; //目前存在的tower对象
+/**
+ * @type {Tower[]} 目前存在的tower对象
+ */
+export var towerList = []; //
 export var floorsList = [];
 export var cannonsList = [];
 
-export var towerDataDict = {} //这里是塔数据保存
-export function addTowerData(key,value){
-    towerDataDict[key]=value
-}
 // export function getGameArguments(){
 //     return {
 //         "state":STATE,
@@ -71,4 +72,4 @@ export function addTowerData(key,value){
 //     }
 // }
 
-import("./towers/towerDictPlugin.js")
+//import("./towers/towerDictPlugin.js")

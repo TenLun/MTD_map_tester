@@ -1,6 +1,5 @@
-import { addTowerData } from "../gameArguments.js";
-import { setMoney,money,crystal,setCrystal,tick } from "../gameArguments.js";
-import { createText } from "../text.js";
+import { setMoney,money,crystal,setCrystal,tick } from "/scripts/gameArguments.js";
+import { createText } from "../../text.js";
 
 var attackTime = tick;
 
@@ -36,11 +35,12 @@ var parameters = {
         "Crystal":4
     }
 }
-addTowerData("sunnytower", {
-    "name":"sunnytower",
+const TOWERDATA = {
+    "type":"sunnytower",
     "events":events,
     "parameters":parameters,
     "upgradetree":upgradeTree,
     "floor":["floor","brokenground"], //可以被放置的地板类型
-    "image":"resources/towers/SunnyTower.png"
-})
+    "image":"/resources/towers/SunnyTower.png"
+};
+export default TOWERDATA

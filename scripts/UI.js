@@ -1,39 +1,12 @@
 //这里也使用DOM
 import { getTower,currentGrid } from "./utils/floorFuncs.js"
 import { toDom,imgToDom } from "./utils/covertToDOM.js"
+import { imageUI,gradeColor,gradeImage,towerDataDict } from "./gameDatas/gameResouces.js"
 import { eventsListening } from "./event.js"
 import { towerList,setState,
     TOTALDAYS,tick,day,money,crystal, 
-    STATE,towerDataDict} from "./gameArguments.js"
+    STATE} from "./gameArguments.js"
 import { spawn_monster } from "./monster.js"
-
-//参数的值
-const imageUI = {
-    "pause": ['resources/UI/icon_common_24.png', "#000000"],
-    "start": ['resources/UI/icon_arrow_14.png', "#000000"],
-
-    "AttackPower": ['resources/UI/AttackPower.png', '#ffff00'],
-    "AttackRange": ['resources/UI/AttackRange.png', '#00ff00'],
-    "AttackTime": ['resources/UI/AttackTime.png', '#00ffff'],
-    "BulletNumber": ['resources/UI/BulletNumber.png', 'yellow'],
-    "MaxHealth": ['resources/UI/MaxHealth.png', '#ff0000'],
-    "Gold": ['resources/UI/MoneyProduction.png', '#ffff00'],
-    "Crystal": ['resources/UI/RockProduction.png', '#ff00ff'],
-}
-// 等级颜色
-export const gradeColor = {
-    "0": 'rgb(0,0,0)',
-    "1": 'rgb(0,255,0)',
-    "2": 'rgb(0, 61, 255)',
-    "3": 'rgb(255,0,255)'
-}
-
-// 等级图标
-const gradeImage = {
-    "1": 'resources/UI/BaseUpgrade.png',
-    "2": 'resources/UI/PromoteUpgrade.png',
-    "choose1": '',
-}
 
 //选择的塔
 var towersChoose = ["arrowtower", "goldmine", "multiplearrowtower", "temporaryarrowtower","wall"]
@@ -332,10 +305,10 @@ class Info {
         this.hp.innerHTML = "0"
 
         this.towerImage = toDom("");
-        this.towerImage.cssText=`
+        this.towerImage.style.cssText=`
             position:absolute;
             right:10px;
-            top: "10px";
+            top: 10px;
             width: 30px;
             height: 30px;
         `
@@ -486,8 +459,8 @@ class DayShow {
             width: 1px;
             height: 20px;
             top: ${this.timebar.style.height};
-            left: 0;
-            objectFit: cover;
+            left: 0%;
+            object-fit: cover;
             overflow: visible;
         `
         this.timebar.appendChild(this.daytimebar)
@@ -617,5 +590,3 @@ export function UIInit() {
         chooseButtonList.push(new TowerChooseButton(tower, towersChoose[tower], 60))
     }
 }
-
-//import 进来的变量享有共同指针

@@ -1,7 +1,6 @@
-import { addTowerData } from "../gameArguments.js";
-import { monsterList,tick } from "../gameArguments.js";
-import { createCannon } from "../cannon.js"
-import { Angle } from "../utils/animation.js"
+import { monsterList,tick } from "../../gameArguments.js";
+import { createCannon } from "../../cannon.js"
+import { Angle } from "../../utils/animation.js"
 
 var attackTime = tick;
 
@@ -38,11 +37,12 @@ var parameters = {
         'BulletNumber':1
     },
 }
-addTowerData("temporaryarrowtower", {
-    "name":"temporaryarrowtower",
+const TOWERDATA ={
+    "type":"temporaryarrowtower",
     "events":events,
     "parameters":parameters,
     "upgradetree":upgradeTree,
     "floor":["ground","gold"], //可以被放置的地板类型
     "image":"resources/towers/TemporaryArrowTower.png"
-})
+}
+export default TOWERDATA

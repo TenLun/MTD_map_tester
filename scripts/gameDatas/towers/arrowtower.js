@@ -1,7 +1,6 @@
-import { addTowerData } from "../gameArguments.js";
-import { createCannon } from "../cannon.js";
-import { Angle } from "../utils/animation.js";
-import { monsterList, tick } from "../gameArguments.js";
+import { createCannon } from "../../cannon.js";
+import { Angle } from "../../utils/animation.js";
+import { monsterList, tick } from "../../gameArguments.js";
 
 var attackTime = tick;
 
@@ -57,11 +56,13 @@ var parameters = {
     }
 }
 
-addTowerData("arrowtower", {
-    "name":"arrowtower",
+const TOWERDATA = {
+    "type":"arrowtower",
     "events":events,
     "parameters":parameters,
     "upgradetree":upgradeTree,
     "floor":["ground","gold"], //可以被放置的地板类型
-    "image":"resources/towers/ArrowTower.png"
-})
+    "image":"/resources/towers/ArrowTower.png"
+}
+
+export default TOWERDATA;

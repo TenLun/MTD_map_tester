@@ -1,5 +1,4 @@
-import { setMoney, money,tick } from "../gameArguments.js";
-import { addTowerData } from "../gameArguments.js";
+import { setMoney, money,tick } from "../../gameArguments.js";
 
 var attackTime = tick;
 
@@ -38,11 +37,12 @@ var parameters = {
         'MaxHealth' : 200
     }
 }
-addTowerData("goldmine", {
-    "name":"goldmine",
+const TOWERDATA = {
+    "type":"goldmine",
     "events":events,
     "parameters":parameters,
     "upgradetree":upgradeTree,
     "floor":"gold", //可以被放置的地板类型
-    "image":"resources/towers/GoldMine.png"
-})
+    "image":"/resources/towers/GoldMine.png"
+}
+export default TOWERDATA

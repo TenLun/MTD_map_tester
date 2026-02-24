@@ -1,7 +1,7 @@
 import { SIZE,STATE,
     money, crystal, setMoney, setCrystal,
-    TOTALDAYS,day,floorsList,towerList,towerDataDict } from "./gameArguments.js";
-import { gradeColor } from "./UI.js";
+    TOTALDAYS,day,floorsList,towerList } from "./gameArguments.js";
+import { gradeColor,towerDataDict } from "./gameDatas/gameResouces.js";
 import { toDom } from "./utils/covertToDOM.js";
 import { currentGrid, getFloorType } from "./utils/floorFuncs.js";
 import { createText } from "./text.js";

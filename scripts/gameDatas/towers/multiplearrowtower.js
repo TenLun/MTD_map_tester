@@ -1,7 +1,6 @@
-import { addTowerData } from "../gameArguments.js";
-import { monsterList,tick } from "../gameArguments.js";
-import { createCannon } from "../cannon.js"
-import { Angle } from "../utils/animation.js"
+import { monsterList,tick } from "../../gameArguments.js";
+import { createCannon } from "../../cannon.js"
+import { Angle } from "../../utils/animation.js"
 
 var attackTime = tick;
 
@@ -46,13 +45,14 @@ var parameters = {
         'MaxHealth': 100,
         'BulletNumber': 5
     },
-}
+};
 
-addTowerData("multiplearrowtower", {
-    "name": "multiplearrowtower",
+const TOWERDATA = {
+    "type": "multiplearrowtower",
     "events": events,
     "parameters": parameters,
     "upgradetree": upgradeTree,
     "floor": ["ground","gold"], //可以被放置的地板类型
     "image": "resources/towers/MultipleArrowTower.png"
-})
+}
+export default TOWERDATA
