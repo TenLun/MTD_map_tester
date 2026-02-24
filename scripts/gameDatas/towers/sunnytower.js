@@ -22,17 +22,24 @@ var upgradeTree = {
 //属性
 var parameters = {
     "0":{
-        'MaxHealth' : 1000,
+        'MaxHealth' : 100,
         'AttackTime' : 5, //是的原作就是这样写的
         "Gold":40,
         "Crystal":2
     },
     "1":{
         'Cost' : {"money":20,"crystal":0},
-        'MaxHealth' : 2000,
+        'MaxHealth' : 200,
         'AttackTime' : 3,
         "Gold":50,
         "Crystal":4
+    },
+    "2":{
+        'Cost' : {"money":20,"crystal":4},
+        'MaxHealth' : 250,
+        'AttackTime' : 3,
+        "Gold":60,
+        "Crystal":5
     }
 }
 const TOWERDATA = {

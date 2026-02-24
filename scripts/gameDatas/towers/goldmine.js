@@ -1,4 +1,5 @@
 import { setMoney, money,tick } from "../../gameArguments.js";
+import { createText } from "../../text.js";
 
 var attackTime = tick;
 

@@ -1,6 +1,9 @@
 //全局的一些参数
+
+import { Tower } from "../tower.js";
+
 //目前选中的地图格子
-export let currentGrid = [0,0];
+export let currentGrid = [];
 /**
  * 改变当前选择的格子
  * @param {*} value 
@@ -19,18 +22,24 @@ export function getCurrentGrid(){
  * @returns 
  */
 export function getFloorType(floorsList){
-    for (var floor in floorsList){
-        if (floorsList[floor].x == currentGrid[0] && floorsList[floor].y == currentGrid[1]){
-            return floorsList[floor].type
+    for (const floorObj of floorsList){
+        if (floorObj.x == currentGrid[0] && floorObj.y == currentGrid[1]){
+            return floorObj.type
         } 
     }
 }
 
-//格子上的塔
+/**
+ * 根据坐标获取格子上的塔
+ * @param {Tower[]} towerList 遍历的塔列表
+ * @param {number} x 
+ * @param {number} y 
+ * @returns {Tower}
+ */
 export function getTower(towerList,x,y){
-    for (var tower in towerList){
-        if (towerList[tower].x == x && towerList[tower].y == y){
-            return towerList[tower]
+    for (const towerObj of towerList){
+        if (towerObj.x == x && towerObj.y == y){
+            return towerObj
         }  
     }
     return false

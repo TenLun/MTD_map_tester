@@ -1,9 +1,10 @@
 import { SIZE,STATE,
     money, crystal, setMoney, setCrystal,
-    TOTALDAYS,day,floorsList,towerList } from "./gameArguments.js";
+    TOTALDAYS,day,floorsList,towerList, 
+    setCurrentTower} from "./gameArguments.js";
 import { gradeColor,towerDataDict } from "./gameDatas/gameResouces.js";
 import { toDom } from "./utils/covertToDOM.js";
-import { currentGrid, getFloorType } from "./utils/floorFuncs.js";
+import { currentGrid, getFloorType, setCurrentGrid } from "./utils/floorFuncs.js";
 import { createText } from "./text.js";
 
 /**
@@ -108,9 +109,17 @@ export class Tower{
         this.hp -= damage
         createText(this.canvasX,this.canvasY,damage,"#ff0000",1,"number")
     }
-    delete(){}
+
     sell(){
-        this.delete()
+        setMoney( money + this.parameters["Cost"])
+        setCurrentTower("")
+        setCurrentGrid([])
+        for (const index in towerList){
+            if ( towerList[index].id == this.id ){
+                towerList.splice(index,1)
+                delete this
+            }
+        }
     }
 
     ifDied(){

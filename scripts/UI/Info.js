@@ -50,14 +50,8 @@ export class Info {
         this.detail = document.createElement("div")
         this.dividerbottom = document.createElement("hr")
 
-        this.informationbar.appendChild(this.name)
-        this.informationbar.appendChild(this.hp)
-        this.informationbar.appendChild(this.towerImage)
-        this.informationbar.appendChild(this.divider)
-        this.informationbar.appendChild(this.detail)
-        this.informationbar.appendChild(this.dividerbottom)
-        document.getElementById("ui_container").appendChild(this.informationbar)
-        /*
+
+        
         this.sellButton = document.createElement("div");
         this.sellButton.style.cssText = `
             text-align: center;
@@ -65,28 +59,41 @@ export class Info {
             background-color: #131313;
             border-radius: 5px;
             padding: 10px;
-            width: 70px;
-            height: 70px;
-            position: fixed;
-            left: 50vw;
-            bottom: 30px;
+            width: 125px;
+            height: 35px;
+            position: absolute;
+            top: -60px
         `
         //图片
         this.sellImage = toDom("/resources/UI/icon_shopping_1.png")
-        this.sellImage.width = 55
-        this.sellImage.height = 55
-        this.sellImage.style.pointerEvents = "none";
+        this.sellImage.style.cssText = `
+            pointer-events: none;
+            position:absolute;
+            left:5px;
+            bottom:5px;
+        `
+        this.sellImage.width = 55;
+        this.sellImage.height = 75;
         //文字
         this.sellMoney = document.createElement("a");
-        this.sellMoney.innerHTML = this.tower.upgradePara[this.upgradeType]["Cost"]["money"];
         this.sellMoney.style.pointerEvents = "none";
 
         this.sellCrystal = document.createElement("a");
-        this.sellCrystal.innerHTML = "+" + this.tower.upgradePara[this.upgradeType]["Cost"]["crystal"] + "C";
         this.sellCrystal.style.pointerEvents = "none";
+
         this.sellButton.appendChild(this.sellImage)
         this.sellButton.appendChild(this.sellMoney)
-        this.sellButton.appendChild(this.sellCrystal) */
+        this.sellButton.appendChild(this.sellCrystal)
+
+        this.informationbar.appendChild(this.sellButton)
+        this.informationbar.appendChild(this.name)
+        this.informationbar.appendChild(this.hp)
+        this.informationbar.appendChild(this.towerImage)
+        this.informationbar.appendChild(this.divider)
+        this.informationbar.appendChild(this.detail)
+        this.informationbar.appendChild(this.dividerbottom)
+
+        document.getElementById("ui_container").appendChild(this.informationbar)
     }
 
     onChange(grid) {
@@ -100,19 +107,22 @@ export class Info {
             return;
         }
         this.informationbar.style.display = '';
-        if (this.towerObj.hp == this.hp.innerHTML) return;
+        if (this.towerObj.id + JSON.stringify(this.towerObj.parameters) == this.idcache) return;
+        this.idcache = this.towerObj.id + JSON.stringify(this.towerObj.parameters)
 
         //真正部分
         this.name.innerHTML = this.towerObj.type
         this.hp.innerHTML = this.towerObj.hp
         this.towerImage.src = this.towerObj.image
 
-        this.towerObj = this.towerObj.parameters
+        console.log(this.towerObj.parameters)
+        this.sellMoney.innerHTML = this.towerObj.parameters["Gold"];
+        this.sellCrystal.innerHTML = `+0C`//${this.towerObj.parameters["Cost"]["crystal"] || 0 }C;
 
         this.detail.style.display = "flex";
         this.detail.style.flexWrap = "wrap";
         this.detail.innerHTML = ""
-        for (var information in this.towerObj) {
+        for (var information in this.towerObj.parameters) {
             if (!(information == "Cost")) {
                 this.param = document.createElement("div");
                 this.param.style.width = "100px"
@@ -121,18 +131,18 @@ export class Info {
 
                 this.paramtext = document.createElement("a")
                 this.paramtext.style.color = "white"
-                this.paramtext.innerHTML = this.towerObj[information]
+                this.paramtext.innerHTML = this.towerObj.parameters[information]
 
                 this.param.appendChild(this.paramtext)
                 this.detail.appendChild(this.param)
             }
         }
+        var that = this;
+        this.sellButton.addEventListener("click",()=>{that.onSellBtnClick(that.towerObj)},{once:true})
     }
 
-    onSellBtnClick() {
-        if (!this.IfAddClickEvent) return;
-        this.tower.upgrade(this.upgradeType)
-        towerInformation.onChange(currentGrid)
-        this.delete()
+    onSellBtnClick(towerObj) {
+        towerObj.sell()
+        this.sellButton.removeEventListener("click",()=>{that.onSellBtnClick()})
     }
 }

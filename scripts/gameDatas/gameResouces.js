@@ -32,7 +32,7 @@ export const imageUI = {
 export const gradeColor = {
     "0": 'rgb(0,0,0)',
     "1": 'rgb(0,255,0)',
-    "2": 'rgb(0, 61, 255)',
+    "2": 'rgba(0, 0, 255)',
     "3": 'rgb(255,0,255)'
 }
 

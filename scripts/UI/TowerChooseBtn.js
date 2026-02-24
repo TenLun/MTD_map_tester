@@ -1,7 +1,7 @@
 import { toDom } from "../utils/covertToDOM.js"
 import { towerDataDict } from "../gameDatas/gameResouces.js"
 import { eventsListening } from "../event.js"
-import { money,currentTower } from "../gameArguments.js"
+import { money,currentTower, setCurrentTower } from "../gameArguments.js"
 //塔类选择
 export class TowerChooseButton {
     constructor(number, tower, size) {
@@ -54,6 +54,7 @@ export class TowerChooseButton {
         this.chooseButton.appendChild(this.image);
         this.chooseButton.appendChild(this.costText);
         this.chooseButton.appendChild(this.mask);
+        this.chooseButton.appendChild(this.chooseImg);
         document.getElementById("ui_container").appendChild(this.chooseButton);
 
         this.delayCD = towerDataDict[this.tower]["parameters"]["delay"]
@@ -77,7 +78,7 @@ export class TowerChooseButton {
 
     event() {
         if (money < towerDataDict[this.tower]["parameters"][0]["Cost"]) {
-            if (currentTower == this.tower) currentTower = ""
+            if (currentTower == this.tower) setCurrentTower("")
             this.costText.style.color = 'rgb(255,0,0)';
         } else {
             this.costText.style.color = 'rgb(0,255,0)';
@@ -85,7 +86,7 @@ export class TowerChooseButton {
         this.mask.style.height = (towerDataDict[this.tower]["parameters"]["delay"] - this.delayCD) / towerDataDict[this.tower]["parameters"]["delay"] * 100 + "%"
         this.mask.style.top = this.delayCD / towerDataDict[this.tower]["parameters"]["delay"] * 100 + "%"
         if (this.delayCD < towerDataDict[this.tower]["parameters"]["delay"]) {
-            if (currentTower == this.tower) currentTower = ""
+            if (currentTower == this.tower) setCurrentTower("")
             this.delayCD += 1
         }
         this.onSelect()
@@ -93,21 +94,24 @@ export class TowerChooseButton {
 
     onClick() {
         if (currentTower == this.tower) {
-            currentTower = ""
+            setCurrentTower("")
         } else {
-            currentTower = this.tower
+            setCurrentTower(this.tower)
         }
     }
 
     onSelect(){
         if (currentTower == this.tower){
             this.chooseImg.style.opacity = "1"
+        } else {
+            this.chooseImg.style.opacity = "0"
         }
     }
 
     onHover() {
-        
+        this.chooseButton.style.backgroundColor="#646464ff"
     }
     onOut() {
+        this.chooseButton.style.backgroundColor="#414141"
     }
 }
