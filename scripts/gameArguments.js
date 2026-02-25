@@ -64,7 +64,7 @@ export var floorsList = [];
 /** @type {Cannon[]} 目前存在的子弹对象 */
 export var cannonsList = [];
 
-/** 当前选择的塔 */
+/** @type {Tower.type | ""} 当前选择的塔类型 */
 export var currentTower = ""
 export function setCurrentTower(value){
     currentTower = value

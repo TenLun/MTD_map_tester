@@ -26,13 +26,6 @@ function cannon_event(){
 }
 eventsListening.push([cannon_event,"cannon"])
 
-function map_event(){
-    for (const floorObj of floorsList){
-        floorObj.event()
-    }
-}
-eventsListening.push([map_event,"Map_event"])
-
 //时间推进
 function Time(){
     if (STATE == "pause" || day == TOTALDAYS.length) return;

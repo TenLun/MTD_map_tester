@@ -2,50 +2,16 @@ import { MAP_CONTAINER } from "./utils/getElements.js";
 import { OFFSET,
     floorsList,cannonsList,monsterList,towerList,canvasWidth,canvasHeight } from "./gameArguments.js";
 
-const mainCanvas = document.getElementById("main_canvas"); //最终渲染的canvas
-const mainCtx = mainCanvas.getContext('2d');
+import { mainCanvas,cacheCanvas } from "./utils/getElements.js";
 
-const cacheCanvas = document.createElement('canvas'); // 新建一个 canvas 作为缓存 canvas
-const cacheCtx = cacheCanvas.getContext("2d");
+export var renderObjects = [];
+
+const mainCtx = mainCanvas.getContext('2d');
+export const cacheCtx = cacheCanvas.getContext("2d");
 
 cacheCanvas.width  = mainCanvas.width  = canvasWidth;
 cacheCanvas.height = mainCanvas.height = canvasHeight;
-//全部渲染
-export function renderAll() {
-    cacheCtx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-    MAP_CONTAINER.style.left = OFFSET[0] + "px"
-    MAP_CONTAINER.style.top = OFFSET[1] + "px"
-    
-    render_map(floorsList) //地图块在最底下
-    render_tower(towerList) //塔的图层占中
-    render_monster(monsterList)
-    render_cannon(cannonsList)
-    //render_text() //deprecate 换成dom了 最上面是文字
-    mainCtx.drawImage(cacheCanvas, 0, 0)
-}
-
-function render_monster(monster_list){
-    for (const monsterObj of monster_list){
-        monsterObj.render(cacheCtx)
-    }
-}
-
-//渲染每一个塔
-function render_tower(tower_list){
-    for (const towerObj of tower_list){
-        towerObj.render(cacheCtx)
-    }
-}
-
-//渲染子弹
-function render_cannon(cannons_list){
-    for (const cannonObj of cannons_list){
-        cannonObj.render(cacheCtx)
-    }
-}
-
-//事件监听
 function render_map(floors_list){
     cacheCtx.save();
     cacheCtx.fillStyle = "#414141";
@@ -53,4 +19,51 @@ function render_map(floors_list){
     for (const floorObj of floors_list){
         floorObj.render(cacheCtx)
     }
+}
+renderObjects.push(()=>{ render_map(floorsList) })
+
+//渲染每一个塔
+function render_tower(tower_list){
+    for (const towerObj of tower_list){
+        towerObj.render(cacheCtx)
+    }
+}
+renderObjects.push(()=>{render_tower(towerList) })
+
+function render_monster(monster_list){
+    for (const monsterObj of monster_list){
+        monsterObj.render(cacheCtx)
+    }
+}
+renderObjects.push(()=>{render_monster(monsterList)})
+
+//渲染子弹
+function render_cannon(cannons_list){
+    for (const cannonObj of cannons_list){
+        cannonObj.render(cacheCtx)
+    }
+}
+renderObjects.push(()=>{render_cannon(cannonsList)})
+
+//全部渲染
+function renderAll(){
+    if (renderObjects == 0) return;
+    for (const renderObj of renderObjects) {
+        renderObj()
+    }
+}
+
+export function runRender() {
+    cacheCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+    MAP_CONTAINER.style.left = OFFSET[0] + "px"
+    MAP_CONTAINER.style.top = OFFSET[1] + "px"
+    
+    renderAll()
+
+
+    //地图块在最底下
+    //塔的图层占中
+    //render_text() //deprecate 换成dom了 最上面是文字
+    mainCtx.drawImage(cacheCanvas, 0, 0)
 }

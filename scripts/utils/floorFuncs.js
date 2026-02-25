@@ -1,5 +1,6 @@
 //全局的一些参数
 
+import { Ground } from "../map.js";
 import { Tower } from "../tower.js";
 
 //目前选中的地图格子
@@ -15,18 +16,18 @@ export function getCurrentGrid(){
     return currentGrid
 }
 
-
 /**
- * 遍历floorlist 返回当前floor类型
- * @param {*} value 
- * @returns 
+ *  返回
+ * @param {Ground[]} floorsList 遍历floorlist
+ * @param {number[]} position 
+ * @returns {Ground.type} 当前floor类型
  */
-export function getFloorType(floorsList){
+export function getFloorType(floorsList,position){
     for (const floorObj of floorsList){
-        if (floorObj.x == currentGrid[0] && floorObj.y == currentGrid[1]){
-            return floorObj.type
-        } 
+        if (floorObj.position.toString() !== position.toString() ) continue;
+        return floorObj.type
     }
+    return false;
 }
 
 /**

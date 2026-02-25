@@ -3,19 +3,14 @@ import { Angle, distancePow } from "../../utils/mathFuncs.js";
 import { monsterList, tick } from "../../gameArguments.js";
 import { Tower } from "../../tower.js";
 
-var attackTime = tick;
-
 /**
  * 每一次渲染触发的事件
  * @param {Tower} towerObj 
  * @returns 
  */
 function events(towerObj){
-    if ( (tick - attackTime)/60 < towerObj.parameters["AttackTime"]) return;
-
     for (const monsterObj of monsterList) {
         if ( distancePow(monsterObj,towerObj) > Math.pow(towerObj.parameters['AttackRange'],2) ) {
-            console.log(distancePow(monsterObj,towerObj))
             continue;
         }
         createCannon(
@@ -28,7 +23,6 @@ function events(towerObj){
         )
         break;
     }
-    attackTime = tick;//重置计时器
 }
 
 //升级技能树(当前等级可以升哪个等级)

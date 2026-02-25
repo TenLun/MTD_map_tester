@@ -4,9 +4,9 @@ import { eventsListening } from "../event.js"
 import { money,currentTower, setCurrentTower } from "../gameArguments.js"
 //塔类选择
 export class TowerChooseButton {
-    constructor(number, tower, size) {
+    constructor(number, towerType, size) {
         this.number = number
-        this.tower = tower
+        this.towerType = towerType
         this.size = size
 
         this.id = Math.ceil(Math.random() * 10000000)
@@ -29,14 +29,14 @@ export class TowerChooseButton {
             display: flex;
             flex-direction: column;
         `
-        this.image = toDom(towerDataDict[this.tower]["image"]);
+        this.image = toDom(towerDataDict[this.towerType]["image"]);
         this.image.style.margin = "auto";
         this.image.style.width = this.size / 2 + "px";
         this.image.style.height = this.size / 2 + "px";
         this.image.style.pointerEvents = "none";
 
         this.costText = document.createElement("div")
-        this.costText.innerHTML = towerDataDict[this.tower]["parameters"][0]["Cost"];
+        this.costText.innerHTML = towerDataDict[this.towerType]["parameters"][0]["Cost"];
         this.costText.style.margin = 'auto';
         this.costText.style.color = 'rgb(0,255,0)';
         this.costText.style.pointerEvents = "none";
@@ -57,7 +57,7 @@ export class TowerChooseButton {
         this.chooseButton.appendChild(this.chooseImg);
         document.getElementById("ui_container").appendChild(this.chooseButton);
 
-        this.delayCD = towerDataDict[this.tower]["parameters"]["delay"]
+        this.delayCD = towerDataDict[this.towerType]["parameters"]["delay"]
 
         this.IfOnHover = 0
         var that = this;
@@ -77,31 +77,31 @@ export class TowerChooseButton {
     };
 
     event() {
-        if (money < towerDataDict[this.tower]["parameters"][0]["Cost"]) {
-            if (currentTower == this.tower) setCurrentTower("")
+        if (money < towerDataDict[this.towerType]["parameters"][0]["Cost"]) {
+            if (currentTower == this.towerType) setCurrentTower("")
             this.costText.style.color = 'rgb(255,0,0)';
         } else {
             this.costText.style.color = 'rgb(0,255,0)';
         }
-        this.mask.style.height = (towerDataDict[this.tower]["parameters"]["delay"] - this.delayCD) / towerDataDict[this.tower]["parameters"]["delay"] * 100 + "%"
-        this.mask.style.top = this.delayCD / towerDataDict[this.tower]["parameters"]["delay"] * 100 + "%"
-        if (this.delayCD < towerDataDict[this.tower]["parameters"]["delay"]) {
-            if (currentTower == this.tower) setCurrentTower("")
+        this.mask.style.height = (towerDataDict[this.towerType]["parameters"]["delay"] - this.delayCD) / towerDataDict[this.towerType]["parameters"]["delay"] * 100 + "%"
+        this.mask.style.top = this.delayCD / towerDataDict[this.towerType]["parameters"]["delay"] * 100 + "%"
+        if (this.delayCD < towerDataDict[this.towerType]["parameters"]["delay"]) {
+            if (currentTower == this.towerType) setCurrentTower("")
             this.delayCD += 1
         }
         this.onSelect()
     }
 
     onClick() {
-        if (currentTower == this.tower) {
+        if (currentTower == this.towerType) {
             setCurrentTower("")
         } else {
-            setCurrentTower(this.tower)
+            setCurrentTower(this.towerType)
         }
     }
 
     onSelect(){
-        if (currentTower == this.tower){
+        if (currentTower == this.towerType){
             this.chooseImg.style.opacity = "1"
         } else {
             this.chooseImg.style.opacity = "0"

@@ -1,6 +1,9 @@
 import { OFFSET } from "../gameArguments.js";
 
 export const MAP_CONTAINER = document.getElementById("map_container");
+export const mainCanvas = document.getElementById("main_canvas"); //最终渲染的canvas
+export const cacheCanvas = document.createElement('canvas'); // 新建一个 canvas 作为缓存 canvas
+
 //移动
 window.onload=()=>{
     MAP_CONTAINER.onmousedown = function(event) {

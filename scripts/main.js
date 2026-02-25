@@ -1,10 +1,11 @@
-import { setTarget,towerList,floorsList } from "./gameArguments.js";
+import { setTarget,towerList,floorsList, SIZE } from "./gameArguments.js";
 import { setTowerDataInit,TowerPlugins,setMonsterDataInit,MonsterPlugins } from "./gameDatas/DictPlugin.js";
-import { runEvents } from "./event.js";
+import { eventsListening, runEvents } from "./event.js";
 import { Tower } from "./tower.js";
 import { Ground } from "./map.js";
+import { SelectBar } from "./selector.js";
 import { UIInit } from "./UI.js";
-import { renderAll } from "./render.js";
+import { cacheCtx, renderObjects, runRender } from "./render.js";
 
 const floor_data = level_data["map"]
 const tower_data = level_data["tower"]
@@ -19,6 +20,7 @@ async function start() {
     // //添加关卡已有元素
     floor_init(floor_data,floorsList);
     tower_init(tower_data,towerList);
+    select_init()
     setTarget(tower_data);
     UIInit()
     MainLoop()
@@ -27,7 +29,7 @@ async function start() {
 //主游戏循环
 function MainLoop() {
     runEvents();
-    renderAll();
+    runRender();
     requestAnimationFrame(MainLoop);
 }
 
@@ -35,7 +37,7 @@ function tower_init(tower_data,tower_list){
     for (const towerArg of tower_data){
         var towerPos = towerArg["position"]
         var towerType = towerArg["type"]
-        tower_list.push(new Tower(towerPos,towerType))
+        tower_list.push(new Tower(towerPos,towerType,SIZE))
     }
 }
 
@@ -44,8 +46,14 @@ function floor_init(floor_data,floor_list){
     for (const floorArg of floor_data){
         var floorPos = floorArg["position"]
         var floor_type = floorArg["type"]
-        floor_list.push(new Ground(floorPos,floor_type))
+        floor_list.push(new Ground(floorPos,floor_type,SIZE))
     }
+}
+
+function select_init(){
+    var selectBar = new SelectBar(SIZE)
+    eventsListening.push([()=>{selectBar.event()},""])
+    renderObjects.push(()=>{selectBar.render(cacheCtx)})
 }
 
 start()

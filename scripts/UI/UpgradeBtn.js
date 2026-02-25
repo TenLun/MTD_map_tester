@@ -56,7 +56,7 @@ export class UpgradeBtn {
         })
         this.IfAddClickEvent = 1;
 
-        eventsListening.push([function () { that.onChange(currentGrid);that.animate()}, this.id])
+        eventsListening.push([() => { that.onChange(currentGrid);that.animate() }, this.id])
     }
 
     onChange(grid) {

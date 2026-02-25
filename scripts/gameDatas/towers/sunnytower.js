@@ -1,17 +1,11 @@
-import { setMoney,money,crystal,setCrystal,tick } from "/scripts/gameArguments.js";
+import { setMoney,money,crystal,setCrystal } from "/scripts/gameArguments.js";
 import { createText } from "../../text.js";
 
-var attackTime = tick;
-
 function events(towerObj){
-    if ( (tick - attackTime)/60 < towerObj.parameters["AttackTime"]) return;
-
     setMoney(money + towerObj.parameters['Gold']);
     createText(towerObj.canvasX, towerObj.canvasY, towerObj.parameters['Gold']+"G","#ffff00",1.5,"production");
     setCrystal(crystal + towerObj.parameters['Crystal']);
     createText(towerObj.canvasX, towerObj.canvasY, towerObj.parameters['Crystal']+"C","#ff00ff",1.5,"production");
-
-    attackTime = tick;//重置计时器
 }
 
 //升级技能树(当前等级可以升哪个等级)

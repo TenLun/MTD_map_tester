@@ -1,7 +1,8 @@
-import { SIZE,STATE,
+import { STATE,
     money, crystal, setMoney, setCrystal,
     TOTALDAYS,day,floorsList,towerList, 
-    setCurrentTower} from "./gameArguments.js";
+    setCurrentTower,
+    tick } from "./gameArguments.js";
 import { gradeColor,towerDataDict } from "./gameDatas/gameResouces.js";
 import { toDom } from "./utils/covertToDOM.js";
 import { currentGrid, getFloorType, setCurrentGrid } from "./utils/floorFuncs.js";
@@ -11,36 +12,38 @@ import { createText } from "./text.js";
  * 添加塔
  * @param {number[]} position [x,y]
  * @param {string} type 塔类型
+ * @param {string} size 格子大小
  * @returns {void}
  */
-export function add_tower(position,type){
-    if (!towerDataDict[type]["floor"].includes(getFloorType(floorsList))) return; //不是自己的地板类型
+export function add_tower(position,type,size){
+    if (!towerDataDict[type]["floor"].includes(getFloorType(floorsList,currentGrid))) return; //不是自己的地板类型
     for (const towerObj of towerList){
         if (towerObj.position == position) return; //这个位置已经有了塔
     }
-    towerList.push(new Tower(position,type))
+    towerList.push(new Tower(position,type,size))
     setMoney(money - towerDataDict[type]["parameters"][0]["Cost"])
-    createText(position[0]*(SIZE+1), position[1]*(SIZE+1), type, "#ffffff", 2, "normal")
+    createText(position[0]*(size+1), position[1]*(size+1), type, "#ffffff", 2, "normal")
 }
 
 
 export class Tower{
     /**
-     * 
+     * @constructor
      * @param {*} position [x,y]
      * @param {*} type 塔类型
+     * @param {*} size 地图格子大小
      * @param {*} grade 塔等级
      */
-    constructor(position,type,grade) {
+    constructor(position,type,size,grade) {
         //基本参数
-        this.size = SIZE
+        this.size = size
         this.position = [position[0],position[1]]
         this.x = this.position[0];//相对地图格子上的坐标
         this.y = this.position[1];
-        this.type = type;               //类型
+        this.type = type;              //类型
         this.currentGrade = grade || 0 //当前等级
         
-        this.id = "tower-"+Math.ceil(Math.random()*10000000)
+        this.id = `${this.type}-${Math.ceil(Math.random()*10000000)}`
 
         this.canvasX = this.x*this.size //真实坐标 px (中心在左上)
         this.canvasY = this.y*this.size
@@ -61,7 +64,7 @@ export class Tower{
         this.state = "alive" 
 
         this.event = towerDataDict[this.type]["events"]
-
+        this.timer = tick
     }
 
     render(canvasCtx,animate=0){
@@ -131,7 +134,9 @@ export class Tower{
     events(){ 
         this.ifDied()
         if (STATE == "pause" || day == TOTALDAYS.length) return;
+        if ( (tick - this.timer)/60 < this.parameters["AttackTime"]) return;
         this.event(this)
+        this.timer = tick;//重置计时器
     }
 }
 
