@@ -78,10 +78,18 @@ export class Info {
             pointer-events: none;
             color:white;
             position: absolute;
-            left:0
+            font-size:25px;
+            left:65px
         `
         this.sellCrystal = document.createElement("a");
-        this.sellCrystal.style.pointerEvents = "none";
+        this.sellCrystal.style.cssText = `
+            pointer-events: none;
+            color:white;
+            position: absolute;
+            font-size:19px;
+            left:93px;
+            top:18px;
+        `
 
         this.sellButton.appendChild(this.sellImage)
         this.sellButton.appendChild(this.sellMoney)

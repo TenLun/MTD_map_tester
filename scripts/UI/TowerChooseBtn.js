@@ -96,7 +96,6 @@ export class TowerChooseButton {
         this.mask.style.height = `${(this.delayCD - this.CDtimer) / this.delayCD * 100}%`
         this.mask.style.top    = `${this.CDtimer / this.delayCD * 100}%`
         if (this.CDtimer >= this.delayCD) return;
-        console.log(this.CDtimer)
         if (currentTower == this.towerType) setCurrentTower("");
         this.CDtimer += 1
     }

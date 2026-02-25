@@ -49,8 +49,8 @@
  * @property {towerData} $towertype
  */
 
-/**@type {towerDataDict} */
-export var towerDataDict = {} //这里是塔数据保存
+/**这里是塔数据保存 @type {towerDataDict} */
+export var towerDataDict = {} 
 export function addTowerData(key,value){
     towerDataDict[key]=value
 }
@@ -79,13 +79,16 @@ export const imageUI = {
 export const gradeColor = {
     "0": 'rgb(0,0,0)',
     "1": 'rgb(0,255,0)',
-    "2": 'rgba(0, 0, 255)',
+    "multiCannon": 'rgb(0, 0, 255)',
+    "expandRange": 'rgb(0, 0, 255)',
     "3": 'rgb(255,0,255)'
 }
 
-// 等级图标
+// 等级图标，不同的等级可以公用的
+//以后还会在这里添加等级说明
 export const gradeImage = {
     "1": 'resources/UI/BaseUpgrade.png',
     "2": 'resources/UI/PromoteUpgrade.png',
-    "choose1": '',
+    "multiCannon": '/resources/UI/Repack1.png',
+    "expandRange": '/resources/UI/Repack2.png',
 }

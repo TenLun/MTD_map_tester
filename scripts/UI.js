@@ -17,20 +17,22 @@ var towersChoose = ["arrowtower", "goldmine", "multiplearrowtower", "temporaryar
 
 /**@type {TowerChooseButton[]} */
 export var chooseButtonList = []
+/**@type {UpgradeBtn[]} */
 export var upgradeButtonList = []
 
 //当前选中塔改变
 export function changeTowerInfo(grid) {
-
-    //如果不是塔
     var tower = getTower(towerList, grid[0], grid[1])
-    if (tower.type == undefined) return;
-
-    if (tower.currentGrade == 3 && upgradeButtonList.length < 3) {
-        //?
-    } else if (upgradeButtonList.length == 0) {
-        if (tower.upgradeTree[tower.currentGrade] == undefined) return;
-        upgradeButtonList.push(new UpgradeBtn(grid, tower.upgradeTree[tower.currentGrade]))
+    if (tower.type == undefined) return;                            //如果不是塔
+    if (upgradeButtonList.length != 0) return;                      //如果按钮已存在
+    var grade = tower.upgradeTree[tower.currentGrade]               
+    if (grade == undefined) return;                                 //如果没有升级数
+    if (typeof grade == 'string' ){
+        upgradeButtonList.push(new UpgradeBtn(grid, grade))
+    } else if (typeof grade == 'object') {
+        for (const gradeName of grade){
+            upgradeButtonList.push(new UpgradeBtn(grid, gradeName))
+        }
     }
 }
 

@@ -8,7 +8,7 @@ function events(towerObj){
 //升级技能树(当前等级可以升哪个等级)
 var upgradeTree = {
     "0":"1",
-    "1":"2",
+    "1":["2"],
 }
 //属性
 var parameters = { 

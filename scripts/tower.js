@@ -54,9 +54,10 @@ export class Tower{
         this.animate = 0 //缩放动画
         this.image = towerDataDict[this.type]["image"]
 
-        //参数
-        this.upgradePara = towerDataDict[this.type]["parameters"]
-        this.upgradeTree = towerDataDict[this.type]["upgradetree"]
+        /**每个等级的参数 */
+        this.upgradePara = towerDataDict[this.type]["parameters"];
+        /**等级树 */
+        this.upgradeTree = towerDataDict[this.type]["upgradetree"];
 
         /** @type {import("./gameDatas/gameResouces.js").towerParameters} */
         this.parameters = this.upgradePara[this.currentGrade] //参数
@@ -106,7 +107,7 @@ export class Tower{
         setCrystal( crystal - this.upgradePara[upgrade_type]["Cost"]["crystal"])
         this.currentGrade = upgrade_type
 
-        createText(this.canvasX,this.canvasY,"upgrade","#00ff00",2,"normal")
+        createText(this.canvasX,this.canvasY,"Upgrade-"+upgrade_type,"#00ff00",2,"normal")
     }
 
     degrade(){}
