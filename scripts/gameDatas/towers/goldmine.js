@@ -11,10 +11,9 @@ var upgradeTree = {
     "1":"2",
 }
 //属性
-var parameters = {
-    "delay":200,
+var parameters = { 
     "0":{
-        "Cost" : 50,
+        "Cost" : {"money":50,"crystal":0},
         'AttackTime' : 5,
         'Gold' : 20, //money
         'MaxHealth' : 200
@@ -38,6 +37,7 @@ const TOWERDATA = {
     "parameters":parameters,
     "upgradetree":upgradeTree,
     "floor":"gold", //可以被放置的地板类型
-    "image":"/resources/towers/GoldMine.png"
+    "image":"/resources/towers/GoldMine.png",
+    "delay":200
 }
 export default TOWERDATA

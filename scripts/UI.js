@@ -15,7 +15,7 @@ import { UpgradeBtn } from "./UI/UpgradeBtn.js"
 //选择的塔
 var towersChoose = ["arrowtower", "goldmine", "multiplearrowtower", "temporaryarrowtower","wall"]
 
-
+/**@type {TowerChooseButton[]} */
 export var chooseButtonList = []
 export var upgradeButtonList = []
 

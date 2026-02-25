@@ -63,11 +63,9 @@ export class StateBtn {
         setState(this.state)
     }
     onHover() {
-        this.stateButton.style.border = "1px solid white";
         this.stateButton.style.backgroundColor = "#515151";
     }
     onOut() {
-        this.stateButton.style.border = "";
         this.stateButton.style.backgroundColor = "#414141";
     }
     //被选择

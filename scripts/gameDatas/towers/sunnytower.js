@@ -16,10 +16,11 @@ var upgradeTree = {
 //属性
 var parameters = {
     "0":{
-        'MaxHealth' : 100,
-        'AttackTime' : 5, //是的原作就是这样写的
-        "Gold":40,
-        "Crystal":2
+        Cost :{"money":undefined,"crystal":undefined},
+        MaxHealth : 100,
+        AttackTime : 5, //是的原作就是这样写的
+        Gold:40,
+        Crystal:2
     },
     "1":{
         'Cost' : {"money":20,"crystal":0},

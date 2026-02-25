@@ -2,6 +2,7 @@ import { toDom,imgToDom } from "../utils/covertToDOM.js"
 import { getTower } from "../utils/floorFuncs.js"
 import { towerList } from "../gameArguments.js"
 import { imageUI } from "../gameDatas/gameResouces.js"
+import { Tower } from "../tower.js"
 //选中塔信息
 export class Info {
 
@@ -50,12 +51,9 @@ export class Info {
         this.detail = document.createElement("div")
         this.dividerbottom = document.createElement("hr")
 
-
-        
         this.sellButton = document.createElement("div");
         this.sellButton.style.cssText = `
             text-align: center;
-            user-select: none;
             background-color: #131313;
             border-radius: 5px;
             padding: 10px;
@@ -76,8 +74,12 @@ export class Info {
         this.sellImage.height = 75;
         //文字
         this.sellMoney = document.createElement("a");
-        this.sellMoney.style.pointerEvents = "none";
-
+        this.sellMoney.style.cssText = `
+            pointer-events: none;
+            color:white;
+            position: absolute;
+            left:0
+        `
         this.sellCrystal = document.createElement("a");
         this.sellCrystal.style.pointerEvents = "none";
 
@@ -99,6 +101,8 @@ export class Info {
     onChange(grid) {
 
         this.grid = grid || this.grid
+
+        /**@type {Tower} */
         this.towerObj = getTower(towerList, this.grid[0], this.grid[1]) //拿到目前tower对象
 
         //如果不是塔
@@ -107,8 +111,10 @@ export class Info {
             return;
         }
         this.informationbar.style.display = '';
-        if (this.towerObj.id + JSON.stringify(this.towerObj.parameters) == this.idcache) return;
-        this.idcache = this.towerObj.id + JSON.stringify(this.towerObj.parameters)
+
+        //如果信息没有变化
+        if (this.towerObj.id + JSON.stringify(this.towerObj.parameters) + this.towerObj.hp.toString() == this.lastTowerCache) return;
+        this.lastTowerCache = this.towerObj.id + JSON.stringify(this.towerObj.parameters) + this.towerObj.hp.toString() //保存信息
 
         //真正部分
         this.name.innerHTML = this.towerObj.type
@@ -116,8 +122,8 @@ export class Info {
         this.towerImage.src = this.towerObj.image
 
         console.log(this.towerObj.parameters)
-        this.sellMoney.innerHTML = this.towerObj.parameters["Gold"];
-        this.sellCrystal.innerHTML = `+0C`//${this.towerObj.parameters["Cost"]["crystal"] || 0 }C;
+        this.sellMoney.innerHTML = this.towerObj.parameters.Cost.money;
+        this.sellCrystal.innerHTML = `+${this.towerObj.parameters["Cost"]["crystal"] || 0 }C`
 
         this.detail.style.display = "flex";
         this.detail.style.flexWrap = "wrap";

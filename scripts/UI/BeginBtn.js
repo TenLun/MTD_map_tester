@@ -1,3 +1,4 @@
+import { setState } from "../gameArguments.js";
 import { spawn_monster } from "../monster.js";
 //开始游戏
 export class BeginBtn {
@@ -28,6 +29,7 @@ export class BeginBtn {
     }
 
     onClick() {
+        setState("start")
         spawn_monster()
     }
 }

@@ -1,3 +1,31 @@
-#display-grid{
+#div{
+    user-select: none;
+    border-radius: 5px;
+}
+#a{
+    user-select: none;
+    pointer-events: none;
+    color:white;
+}
 
+* {
+    margin: 0;
+}
+
+body {
+    overflow: hidden;
+    background-color: #292626;
+}
+
+#main_canvas {
+    position: absolute;
+    background: #414141;
+}
+
+#map_container {
+    position: relative;
+}
+
+#ui_container {
+    position: relative;
 }

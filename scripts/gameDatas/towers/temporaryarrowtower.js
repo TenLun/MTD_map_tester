@@ -26,8 +26,9 @@ var upgradeTree = {
 }
 //属性
 var parameters = {
+    
     "0":{
-        'Cost':20,
+        'Cost':{money:10,crystal:0},
         'MaxHealth' : 50,
         'AttackTime' : 1,
         'AttackPower': 5,
@@ -36,11 +37,12 @@ var parameters = {
     },
 }
 const TOWERDATA ={
-    "type":"temporaryarrowtower",
+    type:"temporaryarrowtower",
     "events":events,
-    "parameters":parameters,
-    "upgradetree":upgradeTree,
-    "floor":["ground","gold"], //可以被放置的地板类型
-    "image":"resources/towers/TemporaryArrowTower.png"
+    parameters:parameters,
+    upgradetree:upgradeTree,
+    floor:["ground","gold"], //可以被放置的地板类型
+    image:"resources/towers/TemporaryArrowTower.png",
+    delay:0,
 }
 export default TOWERDATA

@@ -21,7 +21,7 @@ export function add_tower(position,type,size){
         if (towerObj.position == position) return; //这个位置已经有了塔
     }
     towerList.push(new Tower(position,type,size))
-    setMoney(money - towerDataDict[type]["parameters"][0]["Cost"])
+    setMoney(money - towerDataDict[type]["parameters"][0]["Cost"]["money"])
     createText(position[0]*(size+1), position[1]*(size+1), type, "#ffffff", 2, "normal")
 }
 
@@ -29,10 +29,10 @@ export function add_tower(position,type,size){
 export class Tower{
     /**
      * @constructor
-     * @param {*} position [x,y]
-     * @param {*} type 塔类型
-     * @param {*} size 地图格子大小
-     * @param {*} grade 塔等级
+     * @param {number[]} position [x,y]
+     * @param {string} type 塔类型
+     * @param {number} size 地图格子大小
+     * @param {number} grade 塔等级
      */
     constructor(position,type,size,grade) {
         //基本参数
@@ -58,12 +58,15 @@ export class Tower{
         this.upgradePara = towerDataDict[this.type]["parameters"]
         this.upgradeTree = towerDataDict[this.type]["upgradetree"]
 
+        /** @type {import("./gameDatas/gameResouces.js").towerParameters} */
         this.parameters = this.upgradePara[this.currentGrade] //参数
         this.hp = this.parameters["MaxHealth"] //血量
         /**状态 @type  {"alive" | "dead"} */
         this.state = "alive" 
 
+        /** @private */
         this.event = towerDataDict[this.type]["events"]
+        /** @private 计时器*/
         this.timer = tick
     }
 
@@ -114,7 +117,8 @@ export class Tower{
     }
 
     sell(){
-        setMoney( money + this.parameters["Cost"])
+        setMoney( money + this.parameters.Cost.money)
+        setCrystal( crystal  + this.parameters.Cost.crystal)
         setCurrentTower("")
         setCurrentGrid([])
         for (const index in towerList){

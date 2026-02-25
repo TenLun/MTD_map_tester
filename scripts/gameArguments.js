@@ -37,8 +37,11 @@ export function setDay(value){
     day = value
 }
 
-// 游戏状态 "pause" "start" "2x"
+/**游戏状态 @type {"pause" | "start" | "2x" } */
 export var STATE = "pause" 
+/**游戏状态设置
+ * @param {"pause" | "start" | "2x"} value
+ */
 export function setState(value){
     STATE = value
 }
@@ -66,6 +69,7 @@ export var cannonsList = [];
 
 /** @type {Tower.type | ""} 当前选择的塔类型 */
 export var currentTower = ""
+/** 当前选择的塔类型 */
 export function setCurrentTower(value){
     currentTower = value
 }

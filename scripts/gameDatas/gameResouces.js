@@ -2,7 +2,54 @@
  * 这个文件用于存放所有的静态资源键值对对应
  * 在main start中加载并阻塞
  */
+/**
+ * 与 Parameters 的键名对应
+ * {"0":"1","1":"2",}
+ * @typedef UpgradeTree
+ */
+/**
+ * @typedef Cost
+ * @property {number} money
+ * @property {number} crystal
+ */
+/**
+ * 上面面列举必须项
+ * @typedef towerParameters
+ * @property {Cost} Cost  花费的资源
+ * @property {number} AttackTime 不是攻击，而是事件轮询的间隔
+ * @property {number} MaxHealth 最大生命
+ */
 
+/**
+ * {"delay":200,
+ *   "0":{
+ *       'Cost' : 100,
+ *       'AttackPower' : 5,
+ *      'AttackRange' : 250,
+ *      'AttackTime' : 1,
+ *       'MaxHealth' : 100
+ *   },
+ *   "1":{etc...}}
+ * @typedef Parameters
+ * @property {towerParameters} listparams
+ */
+/**
+ * @typedef {Object} towerData
+ * @property {string} type 塔类型
+ * @property {function} events 每一次渲染触发的事件
+ * @property {Parameters} parameters
+ * @property {UpgradeTree} upgradetree 升级树
+ * @property {string[]} floor 可以被放置的地板类型
+ * @property {string} image 图像地址
+ * @property {number} delay 被放置后产生的CD
+ */
+
+/**
+ * @typedef {Object} towerDataDict
+ * @property {towerData} $towertype
+ */
+
+/**@type {towerDataDict} */
 export var towerDataDict = {} //这里是塔数据保存
 export function addTowerData(key,value){
     towerDataDict[key]=value

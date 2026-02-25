@@ -64,10 +64,9 @@ export class SelectBar {
         if (currentTower && !getTower(towerList,gridX,gridY) && towerDataDict[currentTower]['floor'].includes(getFloorType(floorsList,[gridX,gridY])) ) {
             add_tower([gridX,gridY],currentTower,this.size)
             //刷新CD
-            for (var ele in chooseButtonList){
-                if (chooseButtonList[ele].tower == currentTower){
-                    chooseButtonList[ele].delayCD = 0
-                }
+            for (const chooseBtn of chooseButtonList){
+                if (chooseBtn.towerType != currentTower) continue;
+                chooseBtn.CDtimer = 0
             }
             setCurrentTower("")
         }

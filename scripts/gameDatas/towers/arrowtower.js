@@ -33,9 +33,8 @@ var upgradeTree = {
 
 //属性
 var parameters = {
-    "delay":200,
     "0":{
-        'Cost' : 100,
+        'Cost' : {"money":20,"crystal":0},
         'AttackPower' : 5,
         'AttackRange' : 250,
         'AttackTime' : 1,
@@ -63,7 +62,8 @@ const TOWERDATA = {
     "parameters":parameters,
     "upgradetree":upgradeTree,
     "floor":["ground","gold"], //可以被放置的地板类型
-    "image":"/resources/towers/ArrowTower.png"
+    "image":"/resources/towers/ArrowTower.png",
+    "delay":200,
 }
 
 export default TOWERDATA;

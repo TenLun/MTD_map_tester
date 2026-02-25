@@ -1,13 +1,15 @@
 import { toDom } from "../utils/covertToDOM.js"
 import { towerDataDict } from "../gameDatas/gameResouces.js"
 import { eventsListening } from "../event.js"
-import { money,currentTower, setCurrentTower } from "../gameArguments.js"
+import { money,currentTower, setCurrentTower, STATE } from "../gameArguments.js"
 //塔类选择
 export class TowerChooseButton {
     constructor(number, towerType, size) {
         this.number = number
         this.towerType = towerType
         this.size = size
+        this.image = toDom(towerDataDict[this.towerType]["image"]);
+        this.cost = towerDataDict[this.towerType]["parameters"][0]["Cost"]["money"];
 
         this.id = Math.ceil(Math.random() * 10000000)
         this.Init()
@@ -29,14 +31,14 @@ export class TowerChooseButton {
             display: flex;
             flex-direction: column;
         `
-        this.image = toDom(towerDataDict[this.towerType]["image"]);
+        
         this.image.style.margin = "auto";
         this.image.style.width = this.size / 2 + "px";
         this.image.style.height = this.size / 2 + "px";
         this.image.style.pointerEvents = "none";
 
         this.costText = document.createElement("div")
-        this.costText.innerHTML = towerDataDict[this.towerType]["parameters"][0]["Cost"];
+        this.costText.innerHTML = this.cost
         this.costText.style.margin = 'auto';
         this.costText.style.color = 'rgb(0,255,0)';
         this.costText.style.pointerEvents = "none";
@@ -57,7 +59,8 @@ export class TowerChooseButton {
         this.chooseButton.appendChild(this.chooseImg);
         document.getElementById("ui_container").appendChild(this.chooseButton);
 
-        this.delayCD = towerDataDict[this.towerType]["parameters"]["delay"]
+        this.delayCD = towerDataDict[this.towerType]["delay"];
+        this.CDtimer = this.delayCD
 
         this.IfOnHover = 0
         var that = this;
@@ -77,21 +80,27 @@ export class TowerChooseButton {
     };
 
     event() {
-        if (money < towerDataDict[this.towerType]["parameters"][0]["Cost"]) {
+        this.animate()
+        if (money < this.cost) {
             if (currentTower == this.towerType) setCurrentTower("")
             this.costText.style.color = 'rgb(255,0,0)';
         } else {
             this.costText.style.color = 'rgb(0,255,0)';
         }
-        this.mask.style.height = (towerDataDict[this.towerType]["parameters"]["delay"] - this.delayCD) / towerDataDict[this.towerType]["parameters"]["delay"] * 100 + "%"
-        this.mask.style.top = this.delayCD / towerDataDict[this.towerType]["parameters"]["delay"] * 100 + "%"
-        if (this.delayCD < towerDataDict[this.towerType]["parameters"]["delay"]) {
-            if (currentTower == this.towerType) setCurrentTower("")
-            this.delayCD += 1
-        }
         this.onSelect()
     }
 
+    animate(){
+        if (STATE == "pause") return;
+        
+        this.mask.style.height = `${(this.delayCD - this.CDtimer) / this.delayCD * 100}%`
+        this.mask.style.top    = `${this.CDtimer / this.delayCD * 100}%`
+        if (this.CDtimer >= this.delayCD) return;
+        console.log(this.CDtimer)
+        if (currentTower == this.towerType) setCurrentTower("");
+        this.CDtimer += 1
+    }
+    
     onClick() {
         if (currentTower == this.towerType) {
             setCurrentTower("")

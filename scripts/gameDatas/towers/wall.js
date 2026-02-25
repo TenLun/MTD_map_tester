@@ -8,9 +8,9 @@ var upgradeTree = {
 }
 //属性
 var parameters = {
-    "delay":200,
+    
     "0":{
-        "Cost" : 50,
+        "Cost" : {"money":20,"crystal":0},
         'MaxHealth' : 200
     },
     "1":{
@@ -25,6 +25,7 @@ var parameters = {
 const TOWERDATA = {
     "type":"wall",
     "events":events,
+    "delay":200,
     "parameters":parameters,
     "upgradetree":upgradeTree,
     "floor":"brokenground", //可以被放置的地板类型
