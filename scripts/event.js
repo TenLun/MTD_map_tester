@@ -1,7 +1,8 @@
 /*
   用于处理事件，包括渲染
 */
-import { STATE,TOTALDAYS,day,tick, setDay, setTick,towerList,cannonsList,monsterList,floorsList } from "./gameArguments.js";
+import { STATE,TOTALDAYS,day,tick, setDay, setTick,towerList,cannonsList,monsterList } from "./gameArguments.js";
+import { getDayLenth } from "./utils/getElements.js";
 // [function,id]
 export var eventsListening = [];
 
@@ -30,19 +31,11 @@ eventsListening.push([cannon_event,"cannon"])
 function Time(){
     if (STATE == "pause" || day == TOTALDAYS.length) return;
     setTick(tick + 1)
-    if (tick < getDayLenth(day)) return;
+    if (tick < getDayLenth(day,TOTALDAYS)) return;
     setDay(day + 1);
 };
 eventsListening.push([Time, "main_event"])
 
-function getDayLenth(current_day){
-    var dayLenth = 0;
-    for (const day in TOTALDAYS){
-        if (day > current_day) break;
-        dayLenth += eval(TOTALDAYS[day].join("+"));
-    }
-    return dayLenth
-}
 
 //执行添加的事件
 export function runEvents() {

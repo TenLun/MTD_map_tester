@@ -1,5 +1,6 @@
 import { toDom } from "../utils/covertToDOM.js"
-import { tick,day } from "../gameArguments.js"
+import { tick,day, TOTALDAYS } from "../gameArguments.js"
+import { getDayLenth } from "../utils/getElements.js"
 //天数
 export class DayShow {
     constructor(day_data, tick) {
@@ -36,17 +37,21 @@ export class DayShow {
             position: absolute
         `
         this.daytimebar = document.createElement("div");
-        this.daytimebar.style.backgroundColor = "yellow"
+        this.daytimebar.style.backgroundColor = "#fdcd53"
         this.daytimebar.style.width = "0%"
+        this.daytimebar.style.transition = "all .4s"
 
         this.afternoonbar = document.createElement("div")
-        this.afternoonbar.style.backgroundColor = "red"
+        this.afternoonbar.style.backgroundColor = "#c9685c"
         this.afternoonbar.style.width = "0%"
+        this.afternoonbar.style.transition = "all .4s"
 
         this.nightbar = document.createElement("div")
-        this.nightbar.style.backgroundColor = "purple"
+        this.nightbar.style.backgroundColor = "#8576ff"
         this.nightbar.style.width = "0%"
+        this.nightbar.style.transition = "all .4s"
 
+        //这个是看目前天数
         this.timeSliderHander = toDom("resources/UI/TimeSliderHander.png");
         this.timeSliderHander.style.cssText = `
             position: absolute;
@@ -72,7 +77,7 @@ export class DayShow {
             this.daytimebar.style.width = (this.day_data[day][0] / eval(this.day_data[day].join("+")) * 100) + "%"
             this.afternoonbar.style.width = (this.day_data[day][1] / eval(this.day_data[day].join("+")) * 100) + "%"
             this.nightbar.style.width = (this.day_data[day][2] / eval(this.day_data[day].join("+")) * 100) + "%"
-            this.timeSliderHander.style.left = (tick / eval(this.day_data[day].join("+")) * 100) + "%"
+            this.timeSliderHander.style.left = ((tick - getDayLenth(day-1,TOTALDAYS)) / eval(this.day_data[day].join("+")) * 100) + "%"
         }
     }
 }

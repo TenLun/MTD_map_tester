@@ -41,3 +41,17 @@ document.addEventListener("contextmenu", (event) => { event.preventDefault(); })
 export function getMany(mapObject,value){
     
 }
+/**
+ * 返回从第0天到现在的天数的ticks之和
+ * @param {number} current_day 目前天数
+ * @param {} TOTAL_DAYS 总天数
+ * @returns 
+ */
+export function getDayLenth(current_day,TOTAL_DAYS){
+    var dayLenth = 0;
+    for (const day in TOTAL_DAYS){
+        if (day > current_day) break;
+        dayLenth += eval(TOTAL_DAYS[day].join("+"));
+    }
+    return dayLenth
+}
