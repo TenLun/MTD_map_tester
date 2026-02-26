@@ -20,12 +20,107 @@ body {
 #main_canvas {
     position: absolute;
     background: #414141;
+    
 }
-
-#map_container {
+#map_container{
     position: relative;
 }
 
-#ui_container {
+#ui_container{
     position: relative;
+    
+}
+
+.StateBtn{
+    user-select: none;
+    background-color: #1f1f1f;
+    border-radius: 5px;
+    padding: 7px;
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    display: flex;
+}.StateBtn:hover{
+    background-color: #363636;
+}
+
+.TowerChooseBtn{
+    left: 10px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    user-select: none;
+    pointer-events: auto;
+    background-color: #414141;
+    border-radius: 5px;
+    padding: 1px;
+    width: 60px;
+    height: 60px;
+}
+
+.WealthShow{
+    user-select: none;
+    background-color: #131313;
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+    width: 50px;
+    height: 20px;
+    position: absolute;
+    text-align: center;
+}
+
+#change-chosen-tower-ui{
+    position:absolute;
+    display: grid;
+    grid-template-columns: 0.2fr 1.5fr; 
+    grid-template-rows: 0.1fr 1.1fr; 
+    gap: 0px 0px; 
+    grid-template-areas: 
+        "title title"
+        "chosen all"; 
+
+    text-align:center;
+    user-select:none;
+    background-color:#131313;
+    border-radius:5px;
+    padding:10px;
+    width:80vw;
+    height:70vh;
+    color:white;
+    z-index:2;
+    visibility: hidden;
+}
+
+#tower-display{
+    grid-area: all;
+    margin: 10px;
+    padding: 10px;
+    background-color: #7a7a7a;
+}#tower-display-container{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}.TowerSelectElement{
+    margin: 5px;
+    border-radius: 5px;
+    background-color: #464646;
+    align-content: left;
+    text-align: center;
+    width:200px;
+    height:50px;
+}
+
+#chosen-tower-display{
+    margin: 10px;
+    grid-area: chosen;
+    padding: 10px;
+    background-color: #7a7a7a;
+}
+
+.DivButton{
+    z-index: 1;
+}
+.DivButton:hover{
+
 }

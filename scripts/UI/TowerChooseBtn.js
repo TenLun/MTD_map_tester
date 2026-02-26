@@ -2,12 +2,13 @@ import { toDom } from "../utils/covertToDOM.js"
 import { towerDataDict } from "../gameDatas/gameResouces.js"
 import { eventsListening } from "../event.js"
 import { money,currentTower, setCurrentTower, STATE } from "../gameArguments.js"
+import { chooseButtonList } from "../UI.js"
 //塔类选择
 export class TowerChooseButton {
-    constructor(number, towerType, size) {
-        this.number = number
+    constructor(index, towerType,UIcontainer) {
+        this.UIcontainer = UIcontainer
+        this.index = index
         this.towerType = towerType
-        this.size = size
         this.image = toDom(towerDataDict[this.towerType]["image"]);
         this.cost = towerDataDict[this.towerType]["parameters"][0]["Cost"]["money"];
 
@@ -17,24 +18,14 @@ export class TowerChooseButton {
 
     Init() {
         this.chooseButton = document.createElement("div")
-        this.chooseButton.style.cssText = `
-            user-select: none;
-            pointer-events: auto;
-            background-color: #414141;
-            border-radius: 5px;
-            padding: 1px;
-            width: ${this.size}px;
-            height: ${this.size}px;
-            position: absolute;
-            top: ${70 + 65 * this.number}px;
-            left: 10px;
-            display: flex;
-            flex-direction: column;
-        `
+        this.chooseButton.className = "TowerChooseBtn"
+        Object.assign(this.chooseButton.style,{
+            top: `${70 + 65 * this.index}px`,
+        })
         
         this.image.style.margin = "auto";
-        this.image.style.width = this.size / 2 + "px";
-        this.image.style.height = this.size / 2 + "px";
+        this.image.style.width = "30px";
+        this.image.style.height = "30px";
         this.image.style.pointerEvents = "none";
 
         this.costText = document.createElement("div")
@@ -57,26 +48,17 @@ export class TowerChooseButton {
         this.chooseButton.appendChild(this.costText);
         this.chooseButton.appendChild(this.mask);
         this.chooseButton.appendChild(this.chooseImg);
-        document.getElementById("ui_container").appendChild(this.chooseButton);
+        this.UIcontainer.appendChild(this.chooseButton);
 
         this.delayCD = towerDataDict[this.towerType]["delay"];
         this.CDtimer = this.delayCD
-
         this.IfOnHover = 0
-        var that = this;
 
-        eventsListening.push([function () { that.event() }, "chooseBtn-" + this.id]);
+        eventsListening.push([()=>{ this.event() }, "chooseBtn-" + this.id]);
 
-        this.chooseButton.addEventListener("click", function () {
-            that.onClick()
-        });
-        this.chooseButton.addEventListener("mouseenter", function () {
-            that.onHover()
-        });
-        this.chooseButton.addEventListener("mouseleave", function () {
-            that.onOut()
-        });
-
+        this.chooseButton.addEventListener("click",      ()=>{this.onClick()});
+        this.chooseButton.addEventListener("mouseenter", ()=>{this.onHover()});
+        this.chooseButton.addEventListener("mouseleave", ()=>{this.onOut()  });
     };
 
     event() {
@@ -121,5 +103,22 @@ export class TowerChooseButton {
     }
     onOut() {
         this.chooseButton.style.backgroundColor="#414141"
+    }
+
+    delete(){
+        for (const event in eventsListening){
+            if(eventsListening[event][1] != this.id) continue;
+            console.log(eventsListening[event][1])
+            eventsListening.splice(event,1)
+        }
+        this.chooseButton.removeEventListener("click",      ()=>{this.onClick()});
+        this.chooseButton.removeEventListener("mouseenter", ()=>{this.onHover()});
+        this.chooseButton.removeEventListener("mouseleave", ()=>{this.onOut()  });
+        this.chooseButton.removeChild(this.image);
+        this.chooseButton.removeChild(this.costText);
+        this.chooseButton.removeChild(this.mask);
+        this.chooseButton.removeChild(this.chooseImg);
+        this.UIcontainer.removeChild(this.chooseButton);
+        delete this 
     }
 }

@@ -8,15 +8,17 @@ export class BeginBtn {
     Init() {
         this.startButton = document.createElement("div");
         this.startButton.style.cssText = `
+            align-content:center;
+            font-size:35px;
             text-align:center;
             user-select:none;
             background-color:#131313;
             border-radius:5px;
             padding:10px;
-            width:150px;
+            width:225px;
             height:70px;
             position:fixed;
-            left:0px; bottom:0px; color:white
+            left:10px; bottom:10px; color:white
         `
         this.startButton.innerHTML = "开始游戏"
 

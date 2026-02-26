@@ -57,6 +57,7 @@ export function setCrystal(value){
     crystal = value
 }
 export const TOTALDAYS = level_data["total_days"] || 1 //数据内单位是tick
+export const TOWERSLOTS = level_data["tower_slots"] || 3
 
 /** @type {Monster[]} 目前存在的monster对象 */
 export var monsterList = [];
@@ -73,6 +74,8 @@ export var currentTower = ""
 export function setCurrentTower(value){
     currentTower = value
 }
+
+
 
 // export function getGameArguments(){
 //     return {

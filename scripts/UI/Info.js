@@ -1,8 +1,9 @@
 import { toDom,imgToDom } from "../utils/covertToDOM.js"
-import { getTower } from "../utils/floorFuncs.js"
+import { getTower,currentGrid} from "../utils/floorFuncs.js"
 import { towerList } from "../gameArguments.js"
 import { imageUI } from "../gameDatas/gameResouces.js"
 import { Tower } from "../tower.js"
+import { eventsListening } from "../event.js"
 //选中塔信息
 export class Info {
 
@@ -102,6 +103,8 @@ export class Info {
         this.informationbar.appendChild(this.divider)
         this.informationbar.appendChild(this.detail)
         this.informationbar.appendChild(this.dividerbottom)
+
+        eventsListening.push([()=>{ this.onChange(currentGrid) }, "event"])
 
         document.getElementById("ui_container").appendChild(this.informationbar)
     }

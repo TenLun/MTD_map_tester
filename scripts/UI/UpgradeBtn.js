@@ -3,7 +3,7 @@ import { towerList,money,crystal } from "../gameArguments.js"
 import { toDom } from "../utils/covertToDOM.js"
 import { gradeImage } from "../gameDatas/gameResouces.js"
 import { eventsListening } from "../event.js"
-import { upgradeButtonList } from "../UI.js"
+import { changeTowerInfo, upgradeButtonList } from "../UI.js"
 // 升级按钮
 
 const UpgradeBtnContainer = document.createElement('div');
@@ -99,7 +99,6 @@ export class UpgradeBtn {
             upgradeBtn.upgradeButton.removeChild(upgradeBtn.upgradeCrystal)
             UpgradeBtnContainer.removeChild(upgradeBtn.upgradeButton);
         }
-        
         upgradeButtonList.length = 0
         
     }
@@ -107,6 +106,7 @@ export class UpgradeBtn {
     onClick() {
         if (!this.IfAddClickEvent) return;
         this.tower.upgrade(this.upgradeType)
-        this.delete()
+        this.delete();
+        changeTowerInfo(this.grid,money,crystal)
     }
 }

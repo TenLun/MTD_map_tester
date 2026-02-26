@@ -3,7 +3,9 @@
 */
 import { STATE,TOTALDAYS,day,tick, setDay, setTick,towerList,cannonsList,monsterList } from "./gameArguments.js";
 import { getDayLenth } from "./utils/getElements.js";
-// [function,id]
+/**
+ * [function ,id]
+ */
 export var eventsListening = [];
 
 function monster_event(){

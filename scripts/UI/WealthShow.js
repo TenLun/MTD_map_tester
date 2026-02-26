@@ -9,19 +9,12 @@ export class WealthShow {
 
     Init() {
         this.container = document.createElement("div")
-        this.container.style.cssText=`
-            user-select: none;
-            background-color: #131313;
-            border-radius: 5px;
-            padding: 10px;
-            width: 50px;
-            height: 20px;
-            position: absolute;
-            text-align: center;
-            top: ${this.y}px;
-            left: ${this.x}px;
-            color: white
-        `
+        this.container.className = "WealthShow"
+        Object.assign(this.container.style,{
+            left: `${this.x}px`,
+            top: `${this.y}px`,
+
+        })
         this.container.innerHTML = this.variable
         document.getElementById("ui_container").appendChild(this.container)
     }
