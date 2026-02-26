@@ -20,6 +20,8 @@ function events(towerObj){
         towerObj.hurt(2)
         break;
     }
+    if (towerObj.hp > 0) return;
+    towerObj.delete()
 }
 //升级技能树(当前等级可以升哪个等级)
 var upgradeTree = {
@@ -29,7 +31,7 @@ var parameters = {
     
     "0":{
         'Cost':{money:10,crystal:0},
-        'MaxHealth' : 50,
+        'MaxHealth' : 10,
         'AttackTime' : 1,
         'AttackPower': 5,
         'AttackRange': 250,

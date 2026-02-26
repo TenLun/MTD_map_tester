@@ -23,6 +23,6 @@ export var mouseDown = 0;
 mainCanvas.onmousedown = function() { 
     mouseDown = 1;
 }
-mainCanvas.onmouseup = function() {
+document.onmouseup = function() {
     mouseDown = 0;
 }

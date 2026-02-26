@@ -81,6 +81,7 @@ export const gradeColor = {
     "1": 'rgb(0,255,0)',
     "multiCannon": 'rgb(0, 0, 255)',
     "expandRange": 'rgb(0, 0, 255)',
+    "2": 'rgb(0, 0, 255)',
     "3": 'rgb(255,0,255)'
 }
 

@@ -116,10 +116,7 @@ export class Tower{
         this.hp -= damage
         createText(this.canvasX,this.canvasY,damage,"#ff0000",1,"number")
     }
-
-    sell(){
-        setMoney( money + this.parameters.Cost.money)
-        setCrystal( crystal  + this.parameters.Cost.crystal)
+    delete(){
         setCurrentTower("")
         setCurrentGrid([])
         for (const index in towerList){
@@ -130,6 +127,12 @@ export class Tower{
         }
     }
 
+    sell(){
+        setMoney( money + this.parameters.Cost.money)
+        setCrystal( crystal  + this.parameters.Cost.crystal)
+        this.delete()
+    }
+
     ifDied(){
         if (this.hp > 0) return;
         this.state = "dead"
@@ -138,6 +141,7 @@ export class Tower{
     // 每一个攻击时间里的事件
     events(){ 
         this.ifDied()
+        if (this.state == "dead") return;
         if (STATE == "pause" || day == TOTALDAYS.length) return;
         if ( (tick - this.timer)/60 < this.parameters["AttackTime"]) return;
         this.event(this)
