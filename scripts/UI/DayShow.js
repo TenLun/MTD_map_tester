@@ -1,9 +1,12 @@
 import { toDom } from "../utils/covertToDOM.js"
 import { tick,day, TOTALDAYS } from "../gameArguments.js"
 import { getDayLenth } from "../utils/getElements.js"
+import { eventsListening } from "../event.js";
+
 //天数
 export class DayShow {
-    constructor(day_data, tick) {
+    constructor(day_data, tick,UIconatiner) {
+        this.UIconatiner = UIconatiner
         this.day_data = day_data
         this.tick = tick
         this.Init()
@@ -11,20 +14,8 @@ export class DayShow {
 
     Init() {
         this.container = document.createElement("div")
-        this.container.style.cssText=`
-            user-select: none;
-            background-color: #131313;
-            border-radius: 5px;
-            opacity: 0.8;
-            padding: 10px;
-            width: 400px;
-            height: 50px;
-            position: absolute;
-            text-align: center;
-            top: 1px;
-            right: 1px;
-            color: white;
-        `
+        this.container.id = "day-show-container"
+        
         this.days = document.createElement("a")
         this.days.innerHTML = "天数0";
 
@@ -68,7 +59,9 @@ export class DayShow {
         this.timebar.appendChild(this.timeSliderHander)
         this.container.appendChild(this.days)
         this.container.appendChild(this.timebar)
-        document.getElementById("ui_container").appendChild(this.container)
+        this.UIconatiner.appendChild(this.container)
+
+        eventsListening.push([()=>{ this.onChange() }, "day-change"])
     }
 
     onChange() {

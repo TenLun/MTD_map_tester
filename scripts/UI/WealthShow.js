@@ -1,6 +1,8 @@
+import { eventsListening } from "../event.js"
 //显示金币水晶
 export class WealthShow {
-    constructor(variable, x, y) {
+    constructor(variable, x, y, UIcontainer) {
+        this.UIcontainer = UIcontainer
         this.variable = variable
         this.x = x
         this.y = y
@@ -16,7 +18,9 @@ export class WealthShow {
 
         })
         this.container.innerHTML = this.variable
-        document.getElementById("ui_container").appendChild(this.container)
+        this.UIcontainer.appendChild(this.container)
+
+        eventsListening.push([()=>{ this.onChange(this.variable) }, "wealth-change"])
     }
 
     onChange(variable) {

@@ -12,9 +12,6 @@ export let currentGrid = [];
 export function setCurrentGrid(value){
     currentGrid = value
 }
-export function getCurrentGrid(){
-    return currentGrid
-}
 
 /**
  *  返回

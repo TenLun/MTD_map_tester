@@ -2,10 +2,9 @@ import { toDom } from "../utils/covertToDOM.js"
 import { towerDataDict } from "../gameDatas/gameResouces.js"
 import { eventsListening } from "../event.js"
 import { money,currentTower, setCurrentTower, STATE } from "../gameArguments.js"
-import { chooseButtonList } from "../UI.js"
 //塔类选择
 export class TowerChooseButton {
-    constructor(index, towerType,UIcontainer) {
+    constructor(index, towerType, UIcontainer) {
         this.UIcontainer = UIcontainer
         this.index = index
         this.towerType = towerType
@@ -74,7 +73,6 @@ export class TowerChooseButton {
 
     animate(){
         if (STATE == "pause") return;
-        
         this.mask.style.height = `${(this.delayCD - this.CDtimer) / this.delayCD * 100}%`
         this.mask.style.top    = `${this.CDtimer / this.delayCD * 100}%`
         if (this.CDtimer >= this.delayCD) return;

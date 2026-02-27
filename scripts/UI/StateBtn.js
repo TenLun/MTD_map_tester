@@ -4,7 +4,8 @@ import { STATE,setState } from "../gameArguments.js";
 import { eventsListening } from "../event.js";
 //游戏状态选择
 export class StateBtn {
-    constructor(state, right, y) {
+    constructor(state, right, y,UIcontainer) {
+        this.UIcontainer = UIcontainer
         this.state = state;
         this.right = right;
         this.y = y;

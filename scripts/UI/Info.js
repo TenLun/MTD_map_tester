@@ -9,10 +9,11 @@ export class Info {
 
     //@param grid 选中的地板地图坐标
 
-    constructor() {
+    constructor(UIcontainer) {
+        this.UIcontainer = UIcontainer;
+        this.grid = [];
+        this.towerObj = {};
         this.Init()
-        this.grid = []
-        this.towerObj = {}
     }
 
     Init() {
@@ -106,7 +107,7 @@ export class Info {
 
         eventsListening.push([()=>{ this.onChange(currentGrid) }, "event"])
 
-        document.getElementById("ui_container").appendChild(this.informationbar)
+        this.UIcontainer.appendChild(this.informationbar)
     }
 
     onChange(grid) {

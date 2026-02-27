@@ -2,7 +2,8 @@ import { setState } from "../gameArguments.js";
 import { spawn_monster } from "../monster.js";
 //开始游戏
 export class BeginBtn {
-    constructor() {
+    constructor(UIcontainer) {
+        this.UIcontainer = UIcontainer
         this.Init()
     }
     Init() {
@@ -21,13 +22,8 @@ export class BeginBtn {
             left:10px; bottom:10px; color:white
         `
         this.startButton.innerHTML = "开始游戏"
-
-        document.getElementById("ui_container").appendChild(this.startButton)
-
-        var that = this
-        this.startButton.addEventListener("click", function () {
-            that.onClick()
-        })
+        this.UIcontainer.appendChild(this.startButton)
+        this.startButton.addEventListener("click",()=>{this.onClick()})
     }
 
     onClick() {

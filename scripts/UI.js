@@ -1,9 +1,7 @@
 //这里也使用DOM
-import { getTower,currentGrid } from "./utils/floorFuncs.js"
-import { eventsListening } from "./event.js"
+import { getTower } from "./utils/floorFuncs.js"
 import { towerList,
     TOTALDAYS,tick,money,crystal} from "./gameArguments.js"
-
 
 import { WealthShow } from "./UI/WealthShow.js"
 import { StateBtn } from "./UI/StateBtn.js"
@@ -56,27 +54,15 @@ export function changeTowerInfo(grid) {
 export function UIInit() {
     const UIcontainer = document.getElementById("ui_container")
     
-    var towerInformation = new Info();
-    //eventsListening.push([function () { towerInformation.onChange(currentGrid) }, "event"])
-
-    var dayShow = new DayShow(TOTALDAYS, tick)
-    eventsListening.push([function () { dayShow.onChange() }, "event"])
-
-    const pauseBtn = new StateBtn("pause", 470, 9)
-    const startBtn = new StateBtn("start", 430, 9)
-
-    const displaymoney = new WealthShow(money, 10, 0)
-    eventsListening.push([function () { displaymoney.onChange(money) }, "moneyChange"])
-
-    const displaycrystal = new WealthShow(crystal, 130, 0)
-    eventsListening.push([function () { displaycrystal.onChange(crystal) }, "crystal"])
-
-    for (var tower in chosenTowerList) {
-        chooseButtonList.push(new TowerChooseButton(tower, chosenTowerList[tower], UIcontainer))
-    }
-
-    const changeChosenTowerUI = new TowerChooseUI(UIcontainer)
-    new BeginBtn()
+    new Info(UIcontainer);
+    new DayShow(TOTALDAYS, tick, UIcontainer);
+    new StateBtn("pause", 470, 9, UIcontainer);
+    new StateBtn("start", 430, 9, UIcontainer);
+    new WealthShow(money, 10, 0, UIcontainer);
+    new WealthShow(crystal, 130, 0, UIcontainer);
+    const changeChosenTowerUI = new TowerChooseUI(UIcontainer);
+    new BeginBtn(UIcontainer)
     new ChangChosenTowerBtn(UIcontainer,changeChosenTowerUI)
 
+    changeChosenTower(chosenTowerList,UIcontainer)
 }
